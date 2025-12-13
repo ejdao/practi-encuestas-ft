@@ -1,0 +1,23 @@
+@use 'commerce/commerce';
+
+body {
+  font-family: 'bodycommerce' !important;
+}
+
+.default-title-font {
+  font-family: 'titlecommerce' !important;
+}
+
+.default-body-font {
+  font-family: 'bodycommerce' !important;
+}
+
+.mdc-text-field--filled .mdc-floating-label,
+.mdc-text-field--outlined .mdc-floating-label {
+  @extend .default-title-font;
+}
+.tsd-hint,
+.tsd-custom-error,
+.mat-mdc-form-field-input-control.mat-mdc-form-field-input-control {
+  @extend .default-body-font;
+}

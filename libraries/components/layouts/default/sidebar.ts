@@ -1,23 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
-
-interface NavItem {
-  label: string;
-  icon: string;
-  active?: boolean;
-  subitems?: NavItem[];
-  expanded?: boolean;
-}
-
-interface MenuSection {
-  title: string;
-  items: NavItem[];
-}
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { TsdLayoutsMenuSection, TsdLayoutsNavItem } from '@toshida/ng-components/layouts';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [CommonModule],
+  selector: 'tsd-default-db-sidebar',
+  imports: [CommonModule, RouterLink],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <aside class="sidebar" [class.collapsed]="collapsed()">
       <div class="sidebar-header">
@@ -46,6 +42,11 @@ interface MenuSection {
                     class="nav-item"
                     [class.active]="item.active"
                     [class.has-subitems]="item.subitems && item.subitems.length > 0"
+                    [routerLink]="
+                      [''].indexOf(item.url!) >= 0
+                        ? (item.urlExtension || '') + item.url
+                        : undefined
+                    "
                   >
                     <span class="nav-icon">{{ item.icon }}</span>
                     @if (!collapsed()) {
@@ -77,7 +78,7 @@ interface MenuSection {
       </nav>
 
       <div class="sidebar-footer">
-        <button class="nav-item" (click)="onToggle()" title="Toggle sidebar">
+        <button class="nav-item" (click)="onToggle()">
           <span class="nav-icon">{{ collapsed() ? '→' : '←' }}</span>
           @if (!collapsed()) {
             <span class="nav-label">Collapse</span>
@@ -95,20 +96,28 @@ interface MenuSection {
       @for (subitem of items; track $index) {
         <div class="nav-item-wrapper nested">
           <a
-            (click)="selectSubitem(subitem, parentItem, parentSection)"
+            (click)="
+              subitem.subitems && subitem.subitems.length > 0
+                ? toggleNestedItem($event, subitem)
+                : selectSubitem(subitem, parentItem, parentSection)
+            "
             class="subitem"
             [class.active]="subitem.active"
             [class.has-nested]="subitem.subitems && subitem.subitems.length > 0"
+            [routerLink]="
+              !subitem.url
+                ? undefined
+                : (parentSection.urlExtension || '') +
+                  (parentSection.urlExtension ? '/' : '') +
+                  (parentItem.urlExtension || '') +
+                  (parentItem.urlExtension ? '/' : '') +
+                  subitem.url
+            "
           >
+            {{ subitem.isSubmodule }}
             {{ subitem.label }}
             @if (subitem.subitems && subitem.subitems.length > 0) {
-              <span
-                class="expand-icon nested-expand"
-                [class.expanded]="subitem.expanded"
-                (click)="toggleNestedItem($event, subitem)"
-              >
-                ▼
-              </span>
+              <span class="expand-icon nested-expand" [class.expanded]="subitem.expanded"> ▼ </span>
             }
           </a>
           @if (subitem.subitems && subitem.subitems.length > 0 && subitem.expanded) {
@@ -131,107 +140,14 @@ interface MenuSection {
   `,
 })
 export class SidebarComponent {
+  @Input() menuSections = signal<TsdLayoutsMenuSection[]>([]);
   @Input() collapsed = signal(false);
   @Input() isDarkMode = signal(true);
   @Output() toggle = new EventEmitter<void>();
 
   accordionMode = signal(true);
 
-  menuSections = signal<MenuSection[]>([
-    {
-      title: 'Principal',
-      items: [
-        { label: 'Dashboard', icon: '📊', active: true },
-        {
-          label: 'Analytics',
-          icon: '📈',
-          subitems: [
-            { label: 'Reportes', icon: '📋' },
-            {
-              label: 'Métricas',
-              icon: '📊',
-              subitems: [
-                { label: 'Rendimiento', icon: '⚡' },
-                { label: 'Conversión', icon: '🎯' },
-                { label: 'Engagement', icon: '💫' },
-              ],
-            },
-            { label: 'Tendencias', icon: '📉' },
-          ],
-        },
-      ],
-    },
-    {
-      title: 'Gestión',
-      items: [
-        {
-          label: 'Equipo',
-          icon: '👥',
-          subitems: [
-            { label: 'Miembros', icon: '👤' },
-            { label: 'Roles', icon: '🔐' },
-          ],
-        },
-        {
-          label: 'Proyectos',
-          icon: '📁',
-          subitems: [
-            { label: 'Activos', icon: '✅' },
-            {
-              label: 'Archivados',
-              icon: '📦',
-              subitems: [
-                { label: '2024', icon: '📅' },
-                { label: '2023', icon: '📅' },
-              ],
-            },
-            { label: 'Plantillas', icon: '📋' },
-          ],
-        },
-        { label: 'Documentos', icon: '📄' },
-      ],
-    },
-    {
-      title: 'Comunicación',
-      items: [
-        {
-          label: 'Mensajes',
-          icon: '💬',
-          subitems: [
-            { label: 'Directos', icon: '📧' },
-            { label: 'Canales', icon: '📢' },
-          ],
-        },
-        { label: 'Calendario', icon: '📅' },
-      ],
-    },
-    {
-      title: 'Sistema',
-      items: [
-        {
-          label: 'Configuración',
-          icon: '⚙️',
-          subitems: [
-            { label: 'Perfil', icon: '👤' },
-            { label: 'Preferencias', icon: '⚡' },
-            { label: 'Notificaciones', icon: '🔔' },
-          ],
-        },
-        {
-          label: 'Seguridad',
-          icon: '🔒',
-          subitems: [
-            { label: 'Contraseña', icon: '🔑' },
-            { label: 'Sesiones', icon: '📱' },
-            { label: 'Dos Factores', icon: '🛡️' },
-          ],
-        },
-        { label: 'Ayuda', icon: '❓' },
-      ],
-    },
-  ]);
-
-  selectItem(item: NavItem, section: MenuSection) {
+  selectItem(item: TsdLayoutsNavItem, section: TsdLayoutsMenuSection) {
     if (item.subitems && item.subitems.length > 0) {
       this.menuSections.update((sections) =>
         sections.map((sec) => ({
@@ -260,13 +176,18 @@ export class SidebarComponent {
     }
   }
 
-  toggleNestedItem(event: Event, item: NavItem) {
+  toggleNestedItem(event: Event, item: TsdLayoutsNavItem) {
+    console.log(item);
     event.stopPropagation();
     item.expanded = !item.expanded;
     this.menuSections.update((sections) => [...sections]);
   }
 
-  selectSubitem(subitem: NavItem, parentItem: NavItem, _section: MenuSection) {
+  selectSubitem(
+    subitem: TsdLayoutsNavItem,
+    parentItem: TsdLayoutsNavItem,
+    _section: TsdLayoutsMenuSection,
+  ) {
     this.menuSections.update((sections) =>
       sections.map((sec) => ({
         ...sec,

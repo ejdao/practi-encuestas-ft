@@ -1,37 +1,39 @@
-import { Component, signal, effect, ViewEncapsulation } from '@angular/core';
-import { DashboardContentComponent } from './content';
+import { Component, signal, effect, Input, ChangeDetectionStrategy } from '@angular/core';
+import { DbContentComponent } from './content';
 import { HeaderComponent } from './header';
 import { SidebarComponent } from './sidebar';
+import { TsdLayoutsMenuSection } from '@toshida/ng-components/layouts';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, DashboardContentComponent],
+  selector: 'tsd-default-db',
+  imports: [SidebarComponent, HeaderComponent, DbContentComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
       class="app-container"
       [class.sidebar-collapsed]="sidebarCollapsed()"
       [class.light-mode]="isDarkMode() === false"
     >
-      <app-sidebar
+      <tsd-default-db-sidebar
+        [menuSections]="menuSections"
         [collapsed]="sidebarCollapsed"
         (toggle)="toggleSidebar()"
         [isDarkMode]="isDarkMode"
       />
       <div class="main-wrapper">
-        <app-header
+        <tsd-default-db-header
           (toggleMenu)="toggleSidebar()"
           [isDarkMode]="isDarkMode"
           (toggleTheme)="toggleTheme()"
         />
-        <app-dashboard-content />
+        <tsd-default-db-content />
       </div>
     </div>
   `,
-  styleUrl: './styles.scss',
-  encapsulation: ViewEncapsulation.None,
 })
 export class AdminDashboardComponent {
+  @Input() menuSections = signal<TsdLayoutsMenuSection[]>([]);
+
   sidebarCollapsed = signal(false);
   isDarkMode = signal(true);
 

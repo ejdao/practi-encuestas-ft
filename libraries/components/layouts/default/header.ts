@@ -1,10 +1,17 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
+  selector: 'tsd-default-db-header',
   imports: [FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="header">
       <button class="toggle-btn" (click)="onToggleMenu()" title="Toggle menu">

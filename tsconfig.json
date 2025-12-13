@@ -5,7 +5,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@toshida/ng-components/*": ["./dist/components/*"]
+      "@toshida/ng-components/*": ["./libraries/components/*"]
     },
     "strict": true,
     "noImplicitOverride": true,

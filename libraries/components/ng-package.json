@@ -3,5 +3,6 @@
   "dest": "../../dist/components",
   "lib": {
     "entryFile": "index.ts"
-  }
+  },
+  "assets": ["./assets"]
 }
