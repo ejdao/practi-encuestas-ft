@@ -13,7 +13,9 @@ body {
 }
 
 .mdc-text-field--filled .mdc-floating-label,
-.mdc-text-field--outlined .mdc-floating-label {
+.mdc-text-field--outlined .mdc-floating-label,
+.mat-mdc-checkbox .mdc-label,
+.mdc-button .mdc-button__label {
   @extend .default-title-font;
 }
 .tsd-hint,
