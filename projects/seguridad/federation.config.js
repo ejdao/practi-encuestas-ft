@@ -1,10 +1,11 @@
 const { withNativeFederation, shareAll } = require('@angular-architects/native-federation/config');
 
 module.exports = withNativeFederation({
-  name: 'general',
+  name: 'seguridad',
 
   exposes: {
-    './mf': './projects/general/src/routes.ts',
+    './authMf': './projects/seguridad/src/app/auth/routes.ts',
+    './mf': './projects/seguridad/src/routes.ts',
   },
 
   shared: {

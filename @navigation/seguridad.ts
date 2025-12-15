@@ -3,10 +3,10 @@ import { IS_WEB_DISPLAYED_ON_MOBILE, TsdLayoutsMenuSection } from '@toshida/ng-c
 const showedInMobile = IS_WEB_DISPLAYED_ON_MOBILE;
 const urlExt = showedInMobile ? 'mobile' : 'web';
 
-export const GENERAL_SNAV_ITEMS: TsdLayoutsMenuSection[] = [
+export const SEGURIDAD_SNAV_ITEMS: TsdLayoutsMenuSection[] = [
   {
-    title: 'General',
-    urlExtension: `general`,
+    title: 'Seguridad',
+    urlExtension: `seguridad`,
     items: [
       {
         label: 'Permisos',

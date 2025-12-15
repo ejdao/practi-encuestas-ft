@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-root',
   template: `
-    <h1>General</h1>
+    <h1>Seguridad</h1>
     <div class="mf-divider"></div>
     <section>
       <p>Modulo iniciado el 11/Dic/25.</p>

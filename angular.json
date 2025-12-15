@@ -86,25 +86,25 @@
         }
       }
     },
-    "general": {
+    "seguridad": {
       "projectType": "application",
-      "root": "projects/general",
-      "sourceRoot": "projects/general/src",
+      "root": "projects/seguridad",
+      "sourceRoot": "projects/seguridad/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-architects/native-federation:build",
           "options": {},
           "configurations": {
-            "production": { "target": "general:esbuild:production" },
-            "development": { "target": "general:esbuild:development", "dev": true }
+            "production": { "target": "seguridad:esbuild:production" },
+            "development": { "target": "seguridad:esbuild:development", "dev": true }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-architects/native-federation:build",
           "options": {
-            "target": "general:serve-original:development",
+            "target": "seguridad:serve-original:development",
             "rebuildDelay": 500,
             "dev": true,
             "cacheExternalArtifacts": false,
@@ -115,20 +115,20 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/general/tsconfig.spec.json",
+            "tsConfig": "projects/seguridad/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
-            "assets": [{ "glob": "**/*", "input": "projects/general/public" }],
-            "styles": ["projects/general/src/styles.scss"]
+            "assets": [{ "glob": "**/*", "input": "projects/seguridad/public" }],
+            "styles": ["projects/seguridad/src/styles.scss"]
           }
         },
         "esbuild": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "projects/general/src/main.ts",
-            "tsConfig": "projects/general/tsconfig.app.json",
+            "browser": "projects/seguridad/src/main.ts",
+            "tsConfig": "projects/seguridad/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [{ "glob": "**/*", "input": "projects/general/public" }],
-            "styles": ["projects/general/src/styles.scss"],
+            "assets": [{ "glob": "**/*", "input": "projects/seguridad/public" }],
+            "styles": ["projects/seguridad/src/styles.scss"],
             "polyfills": ["es-module-shims"]
           },
           "configurations": {
@@ -156,8 +156,8 @@
         "serve-original": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": { "buildTarget": "general:esbuild:production" },
-            "development": { "buildTarget": "general:esbuild:development" }
+            "production": { "buildTarget": "seguridad:esbuild:production" },
+            "development": { "buildTarget": "seguridad:esbuild:development" }
           },
           "defaultConfiguration": "development",
           "options": { "port": 4201 }

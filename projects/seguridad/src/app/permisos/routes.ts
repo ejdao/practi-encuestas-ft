@@ -6,8 +6,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'manage',
-        loadComponent: () =>
-          import('./presentation/pages/web/manage').then((m) => m.ManageComponent),
+        loadComponent: () => import('./presentation/pages/manage').then((m) => m.ManageComponent),
       },
     ],
   },
