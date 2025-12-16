@@ -2,7 +2,7 @@ import { RouterOutlet } from '@angular/router';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { AdminDashboardContainerComponent } from '@toshida/ng-components/layouts/admin';
 import { TsdLayoutsMenuSection } from '@toshida/ng-components/layouts';
-import { APP_NAVIGATION } from 'src/app/app.navigation';
+import { APP_NAVIGATION_TSD } from 'src/app/app.navigation';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -15,5 +15,5 @@ import { APP_NAVIGATION } from 'src/app/app.navigation';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminDashboardComponent {
-  menuSections = signal<TsdLayoutsMenuSection[]>(APP_NAVIGATION);
+  menuSections = signal<TsdLayoutsMenuSection[]>(APP_NAVIGATION_TSD);
 }

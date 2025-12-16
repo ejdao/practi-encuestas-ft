@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { loadRemoteModule } from '@angular-architects/native-federation';
-import { AdminDashboardComponent } from './app.layout-admin';
+//import { AdminDashboardComponent } from './app.layout-admin';
+import { AdminDashboardComponent } from './layouts/admin';
 
 export const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },

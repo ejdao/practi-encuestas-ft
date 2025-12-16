@@ -1,0 +1,41 @@
+@if (resourcesLoaded) {
+  <tak-admin-db-container
+    appTitle="{{ appTitle }}"
+    appSidebarTitle="{{ sidebarTitle }}"
+    appSidebarSubtitle="{{ sidebarSubtitle }}"
+    [navigation]="navigation"
+    [authorities]="authorities"
+    [context]="context!"
+    [isDinamicSidebar]="true"
+    [sidebarDebounceTime]="200"
+    [accordionInCollections]="accordionInCollections"
+    [disableHiddenCollections]="disableHiddenCollections"
+    [hasFooter]="false"
+    [mdWidth]="900"
+  >
+    <section tak-custom-header>
+      <div class="tak-origin-layout__header--container">
+        <b class="app__header__user-full-name" [title]="userFullName">{{ userFullNameSliced }}</b>
+
+        @if (wasOpenedOnMobile) {
+          <button
+            mat-icon-button
+            class="tak-origin-layout__icon-button"
+            (click)="clickOnChangeVersion('mobile')"
+          >
+            <mat-icon>phone_iphone</mat-icon>
+          </button>
+        }
+
+        <button mat-icon-button class="tak-origin-layout__icon-button" (click)="clickOnLogout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+
+        <button mat-icon-button class="tak-origin-layout__icon-button" (click)="toggleTheme()">
+          <mat-icon>dark_mode</mat-icon>
+        </button>
+      </div>
+    </section>
+    <router-outlet />
+  </tak-admin-db-container>
+}
