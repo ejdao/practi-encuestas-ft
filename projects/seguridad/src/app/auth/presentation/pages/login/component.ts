@@ -15,7 +15,7 @@ import { MatButtonModule } from '@toshida/material/button';
 import { LoginController } from '@seguridad/auth/presentation/controllers';
 import { LoginService } from '@seguridad/auth/application/services';
 import { LoginImpl } from '@seguridad/auth/infrastructure/services';
-import { AUTH_STORAGE_KEY } from '@common/constants';
+import { STORAGE_KEYS } from '@common/constants';
 import { LoginForm } from './form';
 
 @Component({
@@ -56,7 +56,7 @@ export class LoginComponent {
 
       result.fold({
         right: (response) => {
-          localStorage.setItem(AUTH_STORAGE_KEY, response.token!);
+          localStorage.setItem(STORAGE_KEYS.authToken, response.token!);
           this._router.navigate(['']);
         },
         left: (error) => {

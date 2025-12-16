@@ -14,24 +14,14 @@
     [mdWidth]="900"
   >
     <section tak-custom-header>
-      <div class="tak-origin-layout__header--container">
+      <div class="app-admin-layout__header--container">
         <b class="app__header__user-full-name" [title]="userFullName">{{ userFullNameSliced }}</b>
 
-        @if (wasOpenedOnMobile) {
-          <button
-            mat-icon-button
-            class="tak-origin-layout__icon-button"
-            (click)="clickOnChangeVersion('mobile')"
-          >
-            <mat-icon>phone_iphone</mat-icon>
-          </button>
-        }
-
-        <button mat-icon-button class="tak-origin-layout__icon-button" (click)="clickOnLogout()">
+        <button mat-icon-button class="app-admin-layout__icon-button" (click)="clickOnLogout()">
           <mat-icon>logout</mat-icon>
         </button>
 
-        <button mat-icon-button class="tak-origin-layout__icon-button" (click)="toggleTheme()">
+        <button mat-icon-button class="app-admin-layout__icon-button" (click)="toggleTheme()">
           <mat-icon>dark_mode</mat-icon>
         </button>
       </div>

@@ -1,9 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SessionStore } from '@stores/session';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
+  template: `
+    @if (sessionWasLoaded()) {
+      <router-outlet />
+    } @else {
+      <div class="tsd-view-loader">
+        <div class="tsd-spinner">
+          <div class="tsd-double-bounce1"></div>
+          <div class="tsd-double-bounce2"></div>
+        </div>
+      </div>
+    }
+  `,
 })
-export class App {}
+export class App implements OnInit {
+  sessionWasLoaded = signal(false);
+
+  constructor(private _session: SessionStore) {}
+
+  async ngOnInit(): Promise<void> {
+    await this._session.autoInstance();
+
+    const subscription = this._session.observable().subscribe((session) => {
+      if (session.wasLoaded) this.sessionWasLoaded.set(true);
+    });
+
+    subscription.unsubscribe();
+  }
+}

@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
 import { loadRemoteModule } from '@angular-architects/native-federation';
-//import { AdminDashboardComponent } from './app.layout-admin';
 import { AdminDashboardComponent } from './layouts/admin';
+import { AuthGuard, GuestGuard } from '@common/guards';
+import { GEN_AUTHORITIES } from '@authorities/general';
 
 export const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
   {
     path: 'auth',
+    canActivate: [GuestGuard],
     children: [
       {
         path: '',
@@ -16,6 +18,7 @@ export const routes: Routes = [
   },
   {
     path: '',
+    canActivate: [AuthGuard],
     component: AdminDashboardComponent,
     children: [
       {
@@ -25,6 +28,7 @@ export const routes: Routes = [
       {
         path: 'seguridad',
         loadChildren: () => loadRemoteModule('seguridad', './mf').then((m) => m.routes),
+        data: { title: 'Seguridad', authorities: [GEN_AUTHORITIES.CODE] },
       },
     ],
   },
