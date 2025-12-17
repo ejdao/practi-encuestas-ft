@@ -1,8 +1,8 @@
 import { ActionReducerMap } from '@ngrx/store';
-import { Session, sessionReducer } from './session';
+import { SessionI, sessionReducer } from './session';
 
 export interface AppState {
-  session: Session;
+  session: SessionI;
 }
 
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {

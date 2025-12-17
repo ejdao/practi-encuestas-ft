@@ -1,4 +1,4 @@
-import { TokenDecoded, UserDataFromToken } from '@common/models';
+import { TokenDecodedI } from '@common/models';
 import { jwtDecode } from 'jwt-decode';
 import { STORAGE_KEYS } from '../constants';
 
@@ -24,16 +24,22 @@ const tokenDateToDate = (date: number): Date => {
   return new Date(_.setUTCSeconds(date));
 };
 
-export const decodeToken = (token: string = defaultToken): TokenDecoded => {
+export const decodeToken = (token: string = defaultToken): TokenDecodedI => {
   try {
     const tokDecoded: AuthTokenI = jwtDecode(token);
 
-    return new TokenDecoded(
-      new UserDataFromToken(tokDecoded.id, tokDecoded.dcm, 'UNKNOWN'),
-      tokDecoded.rst,
-      tokenDateToDate(tokDecoded.iat),
-      tokenDateToDate(tokDecoded.exp),
-    );
+    const tkDcd: TokenDecodedI = {
+      user: {
+        id: tokDecoded.id,
+        document: tokDecoded.dcm,
+        fullName: 'UNKNOWN',
+      },
+      passWasResetted: tokDecoded.rst,
+      createdAt: tokenDateToDate(tokDecoded.iat),
+      expiredAt: tokenDateToDate(tokDecoded.exp),
+    };
+
+    return tkDcd;
   } catch (error) {
     throw new Error('Token not found or invalid');
   }

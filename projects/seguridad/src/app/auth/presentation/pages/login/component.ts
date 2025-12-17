@@ -16,6 +16,7 @@ import { LoginController } from '@seguridad/auth/presentation/controllers';
 import { LoginService } from '@seguridad/auth/application/services';
 import { LoginImpl } from '@seguridad/auth/infrastructure/services';
 import { STORAGE_KEYS } from '@common/constants';
+import { SessionStore } from '@stores/session';
 import { LoginForm } from './form';
 
 @Component({
@@ -27,7 +28,12 @@ import { LoginForm } from './form';
     MatButtonModule,
     AccessControlComponent,
   ],
-  providers: [{ provide: LoginService, useClass: LoginImpl }, LoginController, TsdToastService],
+  providers: [
+    { provide: LoginService, useClass: LoginImpl },
+    LoginController,
+    TsdToastService,
+    SessionStore,
+  ],
   templateUrl: './component.html',
   styleUrl: './component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -40,6 +46,7 @@ export class LoginComponent {
   constructor(
     _href: ElementRef<HTMLElement>,
     private _auth: LoginController,
+    private _session: SessionStore,
     private _cd: ChangeDetectorRef,
     private _toast: TsdToastService,
     private _router: Router,
@@ -54,15 +61,22 @@ export class LoginComponent {
 
       const result = await this._auth.execute(this.loginForm.model);
 
+      let authSuccess = false;
+
       result.fold({
         right: (response) => {
+          authSuccess = true;
           localStorage.setItem(STORAGE_KEYS.authToken, response.token!);
-          this._router.navigate(['']);
         },
         left: (error) => {
           this._toast.danger(error);
         },
       });
+
+      if (authSuccess) {
+        await this._session.autoInstance();
+        this._router.navigate(['']);
+      }
 
       this.isAuthenticating = false;
       this._cd.markForCheck();

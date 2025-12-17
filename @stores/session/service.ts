@@ -1,13 +1,13 @@
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, firstValueFrom, retry, throwError, timeout } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { setSession, sessionState, sessionInitialState } from './store';
-import { STORAGE_KEYS } from '@common/constants';
-import { STORE_END_POINTS } from '@stores/end-points';
-import { Session } from './entity';
-import { TokCreAndExpInfo, UserDataFromToken } from '@common/models';
 import { decodeToken } from '@common/services/decode-token';
+import { STORE_END_POINTS } from '@stores/end-points';
+import { STORAGE_KEYS } from '@common/constants';
+import { SessionI } from './interface';
 
 interface AuthDataI {
   documento: string;
@@ -18,24 +18,28 @@ interface AuthDataI {
 @Injectable({ providedIn: 'root' })
 export class SessionStore {
   constructor(
-    private store: Store<Session>,
+    private store: Store<SessionI>,
     private _http: HttpClient,
+    private _router: Router,
   ) {}
 
   public dispatch(session: { token: string; authorities: string[]; authData: AuthDataI }): void {
     const tokenDecoded = decodeToken(session.token);
 
-    const newSession = new Session(
-      new TokCreAndExpInfo(tokenDecoded.createdAt, tokenDecoded.expiredAt),
-      new UserDataFromToken(
-        tokenDecoded.user.id,
-        tokenDecoded.user.document,
-        session.authData.nombreCompleto,
-      ),
-      session.authorities,
-      tokenDecoded.passWasResetted,
-      true,
-    );
+    const newSession: SessionI = {
+      token: {
+        createdAt: tokenDecoded.createdAt,
+        expiredAt: tokenDecoded.expiredAt,
+      },
+      user: {
+        id: tokenDecoded.user.id,
+        document: tokenDecoded.user.document,
+        fullName: session.authData.nombreCompleto,
+      },
+      authorities: session.authorities,
+      passWasResetted: tokenDecoded.passWasResetted,
+      wasLoaded: true,
+    };
 
     this.store.dispatch(setSession({ data: newSession }));
   }
@@ -48,7 +52,7 @@ export class SessionStore {
     );
   }
 
-  public observable(): Observable<Session> {
+  public observable(): Observable<SessionI> {
     return this.store.select(sessionState as any);
   }
 
@@ -73,21 +77,13 @@ export class SessionStore {
           authorities,
           authData,
         });
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        throw new Error(error);
       }
     }
   }
 
   private _fetchMyAuthData(): Promise<AuthDataI> {
-    return firstValueFrom(
-      this._http.get<AuthDataI>(STORE_END_POINTS.V1.CONFIG.MY_AUTH_DATA).pipe(
-        timeout({
-          each: 10000,
-          with: () => throwError(() => {}),
-        }),
-        retry(3),
-      ),
-    );
+    return firstValueFrom(this._http.get<AuthDataI>(STORE_END_POINTS.V1.CONFIG.MY_AUTH_DATA));
   }
 }

@@ -5,3 +5,5 @@ export const STORAGE_KEYS = {
   forceWebVersion: 'fc-web-vs',
   forceMobileVersion: 'fc-mob-vs',
 };
+
+export const LOGIN_ROUTE = 'auth/login';

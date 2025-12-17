@@ -1,17 +1,23 @@
 import { createAction, createReducer, createSelector, on, props } from '@ngrx/store';
-import { Session } from './entity';
+import { SessionI } from './interface';
 import { AppState } from '../state';
-import { TokCreAndExpInfo, UserDataFromToken } from '@common/models';
 
-export const setSession = createAction('[Session] Set session', props<{ data: Session }>());
+export const setSession = createAction('[Session] Set session', props<{ data: SessionI }>());
 export const sessionFeatureKey = 'session';
-export const sessionInitialState: Session = new Session(
-  new TokCreAndExpInfo(new Date(), new Date()),
-  new UserDataFromToken('', '', ''),
-  [],
-  false,
-  false,
-);
+export const sessionInitialState: SessionI = {
+  token: {
+    createdAt: new Date(),
+    expiredAt: new Date(),
+  },
+  user: {
+    id: '',
+    document: '',
+    fullName: '',
+  },
+  authorities: [],
+  passWasResetted: false,
+  wasLoaded: false,
+};
 
 export const sessionReducer = createReducer(
   sessionInitialState,

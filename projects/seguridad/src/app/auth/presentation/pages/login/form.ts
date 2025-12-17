@@ -5,9 +5,9 @@ import { required } from '@toshida/ng-components/fields';
 export class LoginForm extends FormGroup {
   constructor() {
     super({
-      username: new FormControl(null, [required]),
-      password: new FormControl(null, [required]),
-      rememberMe: new FormControl(false, [required]),
+      username: new FormControl('1234', [required]),
+      password: new FormControl('12345678', [required]),
+      rememberMe: new FormControl(true, [required]),
     });
   }
 

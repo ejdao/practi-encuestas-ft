@@ -19,7 +19,7 @@ export class LoginImpl implements LoginService {
     (payload as any).context = 'DEFAULT';
 
     return firstValueFrom(
-      this._http.post<LoginRes>(`${environment.apiUrlGen}/auth/login`, payload, {
+      this._http.post<LoginRes>(`${environment.apiUrlGen}/v1/auth/login`, payload, {
         params: { fromMobile },
       }),
     );

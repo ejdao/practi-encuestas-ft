@@ -25,9 +25,9 @@ import { STORAGE_KEYS } from '@common/constants';
 export class AdminDashboardComponent implements OnInit {
   isDarkMode = signal(true);
 
-  public appTitle = 'Eklipse GCM';
-  public sidebarTitle = 'Grupo Clínica Médicos';
-  public sidebarSubtitle = 'Alta complejidad / Medicos Centro';
+  public appTitle = 'Toshida Libraries';
+  public sidebarTitle = 'Developed by Ejdao';
+  public sidebarSubtitle = 'Default Context';
   public tabName = 'Home';
   public accordionInCollections = true;
   public disableHiddenCollections = false;

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SessionStore } from '@stores/session';
 
@@ -17,6 +17,7 @@ import { SessionStore } from '@stores/session';
       </div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App implements OnInit {
   sessionWasLoaded = signal(false);
@@ -24,12 +25,16 @@ export class App implements OnInit {
   constructor(private _session: SessionStore) {}
 
   async ngOnInit(): Promise<void> {
-    await this._session.autoInstance();
+    try {
+      await this._session.autoInstance();
 
-    const subscription = this._session.observable().subscribe((session) => {
-      if (session.wasLoaded) this.sessionWasLoaded.set(true);
-    });
+      const subscription = this._session.observable().subscribe((session) => {
+        if (session.wasLoaded) this.sessionWasLoaded.set(true);
+      });
 
-    subscription.unsubscribe();
+      subscription.unsubscribe();
+    } catch (error: any) {
+      this.sessionWasLoaded.set(true);
+    }
   }
 }
