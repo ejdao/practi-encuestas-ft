@@ -33,6 +33,8 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.spec.json" },
+    { "path": "./libraries/components/tsconfig.lib.json" },
+    { "path": "./libraries/components/tsconfig.spec.json" },
     { "path": "./projects/seguridad/tsconfig.app.json" },
     { "path": "./projects/seguridad/tsconfig.spec.json" }
   ]

@@ -23,12 +23,6 @@
   --tsd-table-not-selectable-row-hover: #cc3c54ea;
   --tsd-table-header-background-color: var(--mat-sys-background);
   --tsd-table-border-color: var(--tak-dark-color-100);
-}
-
-[data-theme='light'] {
-  --tsd-form-field-hint-color: rgb(128, 128, 128);
-  --tsd-form-field-error-color: rgb(255, 0, 0);
-  --tsd-option-span-extra: gray;
   --tsd-snackbar--notification-color: rgb(39, 39, 39);
   --tsd-snackbar--notification-background-color: var(--mat-sys-primary-fixed-dim);
   --tsd-snackbar--notification-button-color: var(--mat-sys-primary);
@@ -38,6 +32,12 @@
   --tsd-snackbar--success-color: rgb(39, 39, 39);
   --tsd-snackbar--success-background-color: rgba(223, 246, 234, 0.925);
   --tsd-snackbar--success-action-button-color: #004646;
+}
+
+[data-theme='light'] {
+  --tsd-form-field-hint-color: rgb(128, 128, 128);
+  --tsd-form-field-error-color: rgb(255, 0, 0);
+  --tsd-option-span-extra: gray;
   --tsd-paginator-container-background-color: rgb(255, 255, 255);
   --tsd-table-background-color: rgb(255, 255, 255);
   --tsd-table-header-color: rgb(255, 255, 255);
