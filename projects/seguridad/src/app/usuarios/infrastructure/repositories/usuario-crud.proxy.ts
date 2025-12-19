@@ -7,6 +7,7 @@ import { UsuarioCrudRepository } from '@seguridad/usuarios/domain/repositories';
 import { Usuario } from '@seguridad/usuarios/domain/entities';
 import { SEG_END_POINTS } from '@seguridad/end-points';
 import { DataStoredI } from '@common/models';
+import { CreateUsuarioPayload } from '@seguridad/usuarios/application/payloads';
 
 @Injectable()
 export class UsuarioCrudProxy implements UsuarioCrudRepository {
@@ -24,6 +25,12 @@ export class UsuarioCrudProxy implements UsuarioCrudRepository {
         tap((data) => this.subject.next(new DataStoredI(data, new Date()))),
       ),
     );
+  }
+
+  public save(payload: CreateUsuarioPayload): Promise<boolean> {
+    const url = SEG_END_POINTS.V1.USUARIOS;
+    if (payload.id) return firstValueFrom(this._http.put<boolean>(`${url}/${payload.id}`, payload));
+    else return firstValueFrom(this._http.post(url, payload).pipe(map(() => true)));
   }
 
   public resetPassword(id: string): Promise<boolean> {

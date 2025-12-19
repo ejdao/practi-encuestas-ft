@@ -1,4 +1,4 @@
-import { CtmTypeRes } from '@common/models';
+import { CtmTypeI } from '@common/models';
 
 export class Rol {
   constructor(

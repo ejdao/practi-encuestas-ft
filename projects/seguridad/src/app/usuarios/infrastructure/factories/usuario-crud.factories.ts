@@ -1,3 +1,7 @@
+import {
+  estadoUsuarioTypeFactory,
+  tipoDocUsuarioTypeFactory,
+} from '@seguridad/usuarios/domain/types';
 import { FetchUsuarioRes } from '../responses';
 import { Rol, Usuario } from '@seguridad/usuarios/domain/entities';
 
@@ -16,8 +20,8 @@ export const usuarioResToEntity = (el: FetchUsuarioRes): Usuario => {
     el.ultimoAcceso,
     el.isPasswordReiniciada,
     new Rol(el.rol.id, el.rol.nombre),
-    el.estado,
-    el.tipoDocumento,
+    estadoUsuarioTypeFactory(el.estado.code),
+    tipoDocUsuarioTypeFactory(el.tipoDocumento.code),
   );
   return res;
 };

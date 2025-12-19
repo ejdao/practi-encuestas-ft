@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataStoredI } from '@common/models';
 import { Either } from '@kato-lee/utilities';
+import { CreateUsuarioPayload } from '@seguridad/usuarios/application/payloads';
 import { Usuario } from '@seguridad/usuarios/domain/entities';
 import { UsuarioCrudRepository } from '@seguridad/usuarios/domain/repositories';
 import { Observable } from 'rxjs';
@@ -15,6 +16,15 @@ export class UsuarioCrudController {
   public async fetch(refresh: boolean): Promise<Result1> {
     try {
       const result = await this._usuarios.fetch(refresh);
+      return Either.right(result);
+    } catch (error) {
+      return Either.left(error);
+    }
+  }
+
+  public async save(payload: CreateUsuarioPayload): Promise<Result2> {
+    try {
+      const result = await this._usuarios.save(payload);
       return Either.right(result);
     } catch (error) {
       return Either.left(error);

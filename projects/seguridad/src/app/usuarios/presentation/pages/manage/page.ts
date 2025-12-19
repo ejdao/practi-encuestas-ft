@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { ManageUsuarioFormComponent } from '../../components/manage-usuario-form';
 
 @Component({
-  imports: [],
-  providers: [],
+  imports: [ManageUsuarioFormComponent],
   selector: 'app-usuarios-manage-web',
   templateUrl: './page.html',
   styleUrls: ['./page.scss'],

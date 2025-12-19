@@ -1,5 +1,5 @@
-import { CtmTypeRes } from '@common/models';
 import { Rol } from './rol.entity';
+import { EstadoUsuarioType, TipoDocUsuarioType } from '../types';
 
 export class Usuario {
   nombreRol: string;
@@ -18,8 +18,8 @@ export class Usuario {
     private _ultimoAcceso: Date,
     private _isPasswordReiniciada: boolean,
     private _rol: Rol,
-    private _estado: CtmTypeRes,
-    private _tipoDocumento: CtmTypeRes,
+    private _estado: EstadoUsuarioType,
+    private _tipoDocumento: TipoDocUsuarioType,
   ) {
     this.nombreRol = _rol.nombre;
   }
@@ -76,11 +76,11 @@ export class Usuario {
     return this._rol;
   }
 
-  get estado(): CtmTypeRes {
+  get estado(): EstadoUsuarioType {
     return this._estado;
   }
 
-  get tipoDocumento(): CtmTypeRes {
+  get tipoDocumento(): TipoDocUsuarioType {
     return this._tipoDocumento;
   }
 }

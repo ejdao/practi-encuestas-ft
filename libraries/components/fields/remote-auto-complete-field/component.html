@@ -1,0 +1,53 @@
+<div class="tsd-form-container">
+  <mat-form-field
+    [appearance]="config.appearance || defaultAppearance"
+    class="tsd-remote-form-field"
+  >
+    <mat-label>
+      {{ placeholder }}{{ ' ' }}
+      @if (isRequired && placeholder) {
+        <span class="tsd-field__danger-x">*</span>
+      }
+    </mat-label>
+    <input matInput [formControl]="autocomplete" [matAutocomplete]="auto" />
+
+    @if (isLoading || (autocomplete.value === null && isLoadingItem)) {
+      <mat-spinner
+        mat-icon-button
+        [diameter]="15"
+        mode="indeterminate"
+        class="spinner-loading"
+      ></mat-spinner>
+    }
+    @if (autocomplete.value) {
+      <button mat-icon-button matSuffix (click)="reset()" [disabled]="formIsDisabled">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+    @if (autocomplete.value && canAddNewProduct && !this.newProductAdded && acceptNewEntities) {
+      <button
+        [disabled]="formIsDisabled"
+        mat-icon-button
+        matSuffix
+        (click)="done()"
+        matTooltip="Pendiente por agregar a base de datos"
+      >
+        <mat-icon>done</mat-icon>
+      </button>
+    }
+
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      @for (option of suggestions; track $index) {
+        <mat-option [value]="option[value]" (onSelectionChange)="emit($event, option)">
+          {{ hasComplement && option[complement] ? option[complement] : '' }}
+          {{
+            option[complement]
+              ? '
+      - '
+              : ''
+          }}{{ option[value] }}
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

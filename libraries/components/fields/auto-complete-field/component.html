@@ -26,11 +26,6 @@
       (focus)="onFocus()"
       (focusout)="onFocusOut()"
     />
-    @if (isRemoteSearch && isLoading) {
-      <button matSuffix mat-icon-button class="tsd-suffix-button" type="button">
-        <mat-spinner [diameter]="15" mode="indeterminate"></mat-spinner>
-      </button>
-    }
     @if ((control.value || value) && config.hasClearButton && !disabled) {
       <button
         matSuffix

@@ -6,8 +6,8 @@ export interface EntidadBasicaI {
   nombre: string;
 }
 
-export interface CtmTypeRes {
-  code: number;
+export interface CtmTypeI<T> {
+  code: T;
   forHumans: string;
   abbreviation?: string;
 }

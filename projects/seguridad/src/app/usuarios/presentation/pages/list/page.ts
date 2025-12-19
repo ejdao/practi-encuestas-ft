@@ -1,29 +1,36 @@
 import {
   ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
   ViewEncapsulation,
+  ViewChild,
+  Component,
+  OnInit,
 } from '@angular/core';
-import { MatButtonModule } from '@toshida/material/button';
-import { MatIconModule } from '@toshida/material/icon';
-import { MatPaginator } from '@toshida/material/paginator';
-import { MatSort } from '@toshida/material/sort';
-import { MatTableDataSource } from '@toshida/material/table';
-import { SessionStore } from '@stores/session';
-import { UsuarioCrudRepository } from '@seguridad/usuarios/domain/repositories';
-import { UsuarioCrudProxy } from '@seguridad/usuarios/infrastructure/repositories';
-import { UsuarioCrudController } from '../../controllers';
+import { FormsModule } from '@angular/forms';
+import { TsdTextFieldComponent } from '@toshida/ng-components/fields';
+import { TsdTablesModule } from '@toshida/ng-components/tables';
 import { TsdToastService } from '@toshida/ng-components/toast';
 import { TsdModalService } from '@toshida/ng-components/modal';
-import { TsdTextFieldComponent } from '@toshida/ng-components/fields';
+import { MatTableDataSource } from '@toshida/material/table';
+import { MatButtonModule } from '@toshida/material/button';
+import { MatPaginator } from '@toshida/material/paginator';
+import { MatIconModule } from '@toshida/material/icon';
+import { MatSort } from '@toshida/material/sort';
+import { SessionStore } from '@stores/session';
+import { UsuarioCrudProxy } from '@seguridad/usuarios/infrastructure/repositories';
+import { UsuarioCrudRepository } from '@seguridad/usuarios/domain/repositories';
 import { Usuario } from '@seguridad/usuarios/domain/entities';
-import { TsdTablesModule } from '@toshida/ng-components/tables';
-import { FormsModule } from '@angular/forms';
+import { ManageUsuarioFormComponent } from '../../components/manage-usuario-form';
+import { UsuarioCrudController } from '../../controllers';
 
 @Component({
-  imports: [TsdTablesModule, TsdTextFieldComponent, FormsModule, MatButtonModule, MatIconModule],
+  imports: [
+    TsdTablesModule,
+    TsdTextFieldComponent,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    ManageUsuarioFormComponent,
+  ],
   providers: [
     { provide: UsuarioCrudRepository, useClass: UsuarioCrudProxy },
     UsuarioCrudController,
@@ -50,15 +57,11 @@ export class Page implements OnInit {
   private _wasUpdated = false;
 
   constructor(
-    href: ElementRef<HTMLElement>,
     private _ctrl: UsuarioCrudController,
     private _toast: TsdToastService,
     private _modal: TsdModalService,
     private _session: SessionStore,
-  ) {
-    href.nativeElement.classList.add('hibrid-mob-web');
-    href.nativeElement.classList.add('gcm-gestionar-usuarios');
-  }
+  ) {}
 
   ngOnInit(): void {
     const subs = this._session.observable().subscribe((session) => {

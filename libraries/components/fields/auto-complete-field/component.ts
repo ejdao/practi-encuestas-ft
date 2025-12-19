@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   EventEmitter,
   Component,
@@ -8,7 +9,6 @@ import {
   Output,
   Input,
   Self,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -19,17 +19,12 @@ import {
   NgControl,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { debounceTime, map, Observable, Subject, Subscription, takeUntil } from 'rxjs';
-import {
-  TSD_DEFAULT_APPEARANCE_FORM,
-  TSD_FIELDS_PRESS_ESC_KEY,
-  TsdAutocompleteFieldType,
-  TsdConfigFieldI,
-} from '../common';
-import { MatOptionModule, MatOptionSelectionChange, ThemePalette } from '@toshida/material/core';
+import { debounceTime, map, Observable, Subject, takeUntil } from 'rxjs';
+import { TSD_DEFAULT_APPEARANCE_FORM, TSD_FIELDS_PRESS_ESC_KEY, TsdConfigFieldI } from '../common';
+import { MatOptionModule, MatOptionSelectionChange } from '@toshida/material/core';
 import { MatProgressSpinnerModule } from '@toshida/material/progress-spinner';
 import { MatAutocompleteModule } from '@toshida/material/autocomplete';
-import { MatFormFieldAppearance, MatFormFieldModule } from '@toshida/material/form-field';
+import { MatFormFieldModule } from '@toshida/material/form-field';
 import { MatButtonModule } from '@toshida/material/button';
 import { MatInputModule } from '@toshida/material/input';
 import { MatIconModule } from '@toshida/material/icon';
@@ -75,7 +70,6 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
   @Input() extraInfo = '';
   @Input() suggestions: any[] = [];
   @Input() isLoading = false;
-  @Input() isRemoteSearch = false;
   @Input() debounceTimeForRemoteSearch = 500;
 
   @Output() onSelect = new EventEmitter<any>();
@@ -114,19 +108,6 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
       takeUntil(this._unsubscribe$),
       map(() => this._filter()),
     );
-
-    if (this.isRemoteSearch) {
-      this.control.valueChanges
-        .pipe(takeUntil(this._unsubscribe$), debounceTime(this.debounceTimeForRemoteSearch))
-        .subscribe(() => {
-          if (this._lastValue !== `${this._value}` && `${this._value}` && !this.control.value) {
-            this.onSearch.emit(`${this._value}`);
-            this._setValue(`${this._value}`);
-          }
-
-          this._lastValue = `${this._value}`;
-        });
-    }
   }
 
   /** @implemented */
@@ -150,7 +131,6 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
   public onChange(event: any): void {
     if (event.target.value !== `${this._value}`) {
       this._value = event.target.value;
-      if (!this.isRemoteSearch) this._setValue(`${this._value}`);
       this.onChangeFn(
         this.suggestions.filter(
           (sug) => `${sug[this.option]}`.toLowerCase() === `${`${this._value}`}`.toLowerCase(),
@@ -203,29 +183,6 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
     if (!option.length) this._notSuggestions = true;
     else this._notSuggestions = false;
     return option;
-  }
-
-  /** @exclusivo */
-  private _setValue(value: string) {
-    if (!this.isRemoteSearch) {
-      const suggestionsFiltered = value
-        ? this.suggestions.filter(
-            (el) =>
-              `${el[this.option]}`.toLowerCase().trim() === (value as string).toLowerCase().trim(),
-          )
-        : [];
-
-      if (suggestionsFiltered.length) {
-        document.body.dispatchEvent(TSD_FIELDS_PRESS_ESC_KEY);
-      }
-
-      try {
-        this.control.setValue(suggestionsFiltered[0][this.option], {
-          emitEvent: false,
-        });
-        this.onSelect.emit(suggestionsFiltered[0]);
-      } catch (error) {}
-    }
   }
 
   /** @exclusivo */
