@@ -15,7 +15,7 @@ export interface TsdToastConfig {
   duration?: number;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TsdToastService {
   constructor(private _snackBar: MatSnackBar) {}
 

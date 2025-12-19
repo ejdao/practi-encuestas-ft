@@ -28,12 +28,7 @@ import { LoginForm } from './form';
     MatButtonModule,
     AccessControlComponent,
   ],
-  providers: [
-    { provide: LoginService, useClass: LoginImpl },
-    LoginController,
-    TsdToastService,
-    SessionStore,
-  ],
+  providers: [{ provide: LoginService, useClass: LoginImpl }, LoginController, SessionStore],
   templateUrl: './component.html',
   styleUrl: './component.scss',
   encapsulation: ViewEncapsulation.None,

@@ -42,47 +42,52 @@ export class TakSidenavComponent implements OnInit {
 
         let avalaibleModules = 0;
 
-        dropdowns?.map((dr) => {
-          if (dr.dropdownLinks) {
-            let avalaibleModulesDropdown = 0;
-            dr.dropdownLinks.forEach((dl) => {
-              if (dl.authorities) {
+        try {
+          dropdowns?.map((dr) => {
+            if (dr.dropdownLinks) {
+              let avalaibleModulesDropdown = 0;
+              dr.dropdownLinks.forEach((dl) => {
+                if (dl.authorities) {
+                  this.authorities.forEach((au) => {
+                    if (dl.authorities!.includes(au)) {
+                      if (
+                        !dl.disableOnContexts?.includes(this.context) &&
+                        !dl.forceDisabledContent
+                      ) {
+                        avalaibleModules++;
+                        avalaibleModulesDropdown++;
+                      }
+                    }
+                  });
+                } else {
+                  if (!dl.disableOnContexts?.includes(this.context) && !dl.forceDisabledContent) {
+                    avalaibleModules++;
+                    avalaibleModulesDropdown++;
+                  }
+                }
+              });
+              if (!avalaibleModulesDropdown) dr.forceDisabledContent = true;
+              else dr.forceDisabledContent = false;
+            } else {
+              if (dr.authorities) {
                 this.authorities.forEach((au) => {
-                  if (dl.authorities!.includes(au)) {
-                    if (!dl.disableOnContexts?.includes(this.context) && !dl.forceDisabledContent) {
+                  if (dr.authorities!.includes(au)) {
+                    if (!dr.disableOnContexts?.includes(this.context) && !dr.forceDisabledContent) {
                       avalaibleModules++;
-                      avalaibleModulesDropdown++;
                     }
                   }
                 });
               } else {
-                if (!dl.disableOnContexts?.includes(this.context) && !dl.forceDisabledContent) {
+                if (!dr.disableOnContexts?.includes(this.context) && !dr.forceDisabledContent) {
                   avalaibleModules++;
-                  avalaibleModulesDropdown++;
                 }
-              }
-            });
-            if (!avalaibleModulesDropdown) dr.forceDisabledContent = true;
-            else dr.forceDisabledContent = false;
-          } else {
-            if (dr.authorities) {
-              this.authorities.forEach((au) => {
-                if (dr.authorities!.includes(au)) {
-                  if (!dr.disableOnContexts?.includes(this.context) && !dr.forceDisabledContent) {
-                    avalaibleModules++;
-                  }
-                }
-              });
-            } else {
-              if (!dr.disableOnContexts?.includes(this.context) && !dr.forceDisabledContent) {
-                avalaibleModules++;
               }
             }
-          }
 
-          if (!avalaibleModules) item.forceDisabledContent = true;
-          else item.forceDisabledContent = false;
-        });
+            if (!avalaibleModules) item.forceDisabledContent = true;
+            else item.forceDisabledContent = false;
+          });
+        } catch (error) {}
       }
     });
   }

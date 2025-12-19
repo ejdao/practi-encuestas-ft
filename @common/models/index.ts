@@ -5,3 +5,24 @@ export interface EntidadBasicaI {
   codigo: string;
   nombre: string;
 }
+
+export interface CtmTypeRes {
+  code: number;
+  forHumans: string;
+  abbreviation?: string;
+}
+
+export class DataStoredI<T> {
+  constructor(
+    private _data: T[],
+    private _updatedAt: Date | null,
+  ) {}
+
+  get data() {
+    return this._data;
+  }
+
+  get updatedAt() {
+    return this._updatedAt;
+  }
+}

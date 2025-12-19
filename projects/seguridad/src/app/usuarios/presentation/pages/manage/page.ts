@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 @Component({
   imports: [],
   providers: [],
-  selector: 'app-manage-by-rol-web',
+  selector: 'app-usuarios-manage-web',
   templateUrl: './page.html',
   styleUrls: ['./page.scss'],
   encapsulation: ViewEncapsulation.None,

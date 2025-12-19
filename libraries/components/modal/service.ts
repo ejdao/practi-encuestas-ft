@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TsdModalService {
-  constructor(private dialog: MatDialog) {}
+  constructor(private _dialog: MatDialog) {}
 
   public alert(content: string, title: string = '', options?: TsdModalConfig): Observable<boolean> {
     return this._generateDialog(content, title, 'alert', options);
@@ -26,7 +26,7 @@ export class TsdModalService {
     type: TsdModalType,
     options?: TsdModalConfig,
   ) {
-    const dialog = this.dialog.open(TsdModalComponent, {
+    const dialog = this._dialog.open(TsdModalComponent, {
       data: {
         content,
         title,
