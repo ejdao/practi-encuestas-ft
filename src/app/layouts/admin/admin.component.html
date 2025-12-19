@@ -1,4 +1,4 @@
-@if (resourcesLoaded) {
+@if (!passWasResetted()) {
   <tak-admin-db-container
     appTitle="{{ appTitle }}"
     appSidebarTitle="{{ sidebarTitle }}"
@@ -28,4 +28,44 @@
     </section>
     <router-outlet />
   </tak-admin-db-container>
+} @else {
+  <div class="d-flex between">
+    <div></div>
+
+    <div class="private-form">
+      <div class="d-flex between">
+        <b>Actualiza tu contraseña</b>
+        <button class="logout-btn" mat-icon-button (click)="clickOnLogout()" [disabled]="isLoading">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+      <br />
+      <tsd-text-field [config]="{ isHidden: true, showHiddenButton: true }" [formControl]="pass">
+        Nueva contraseña
+      </tsd-text-field>
+      <br />
+      <tsd-text-field
+        [config]="{ isHidden: true, showHiddenButton: true }"
+        [formControl]="repeatPass"
+      >
+        Repetir contraseña
+      </tsd-text-field>
+      @if (repeatValueWasUpdated && cadenasNoCoinciden) {
+        <span class="tsd-custom-error tak-fade-in--800ms"> Las contraseñas no coinciden </span>
+      }
+      <br />
+      <div class="d-flex center">
+        <button
+          mat-button
+          color="accent"
+          [disabled]="pass.invalid || (!pass.invalid && cadenasNoCoinciden) || isLoading"
+          (click)="onSend()"
+        >
+          ACTUALIZAR
+        </button>
+      </div>
+    </div>
+
+    <div></div>
+  </div>
 }

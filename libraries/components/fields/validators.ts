@@ -14,3 +14,5 @@ export const minLength = (minLength: number) => Validators.minLength(minLength);
 export const max = (max: number) => Validators.max(max);
 
 export const min = (min: number) => Validators.min(min);
+
+export const withOutSpaces = Validators.pattern(/^[^\s]+$/);

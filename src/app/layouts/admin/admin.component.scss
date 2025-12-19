@@ -83,10 +83,15 @@
     display: none !important;
   }
   .home__description {
-    font-family: 'bodycommerce';
     font-weight: 600;
-    &__title {
-      font-family: Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+  }
+  .private-form {
+    margin: 10px;
+    border: 1px solid rgb(0, 0, 0, 0.12);
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .logout-btn {
+    margin: 20px;
   }
 }

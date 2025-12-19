@@ -13,6 +13,9 @@
 }
 
 :root {
+  --tsd-form-field-hint-color: rgb(128, 128, 128);
+  --tsd-form-field-error-color: rgb(255, 0, 0);
+  --tsd-option-span-extra: gray;
   --tsd-paginator-container-background-color: rgb(13, 17, 23);
   --tsd-table-background-color: var(--mat-sys-background);
   --tsd-table-selectable-row-hover: rgba(124, 124, 124, 0.4);
@@ -35,9 +38,6 @@
 }
 
 [data-theme='light'] {
-  --tsd-form-field-hint-color: rgb(128, 128, 128);
-  --tsd-form-field-error-color: rgb(255, 0, 0);
-  --tsd-option-span-extra: gray;
   --tsd-paginator-container-background-color: rgb(255, 255, 255);
   --tsd-table-background-color: rgb(255, 255, 255);
   --tsd-table-header-color: rgb(255, 255, 255);

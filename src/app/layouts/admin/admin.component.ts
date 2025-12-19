@@ -12,7 +12,21 @@ import { APP_NAVIGATION } from 'src/app/app.navigation';
 import { TsdModalService } from '@toshida/ng-components/modal';
 import { clearLocalStorage } from '@common/services';
 import { SessionStore } from '@stores/session';
-import { STORAGE_KEYS } from '@common/constants';
+import { LOGIN_ROUTE, STORAGE_KEYS } from '@common/constants';
+import { FormControl } from '@angular/forms';
+import { maxLength, minLength, required, withOutSpaces } from '@toshida/ng-components/fields';
+import { TsdToastService } from '@toshida/ng-components/toast';
+import { Router } from '@angular/router';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { Either } from '@kato-lee/utilities';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '@environments/environment';
+
+type Result = Either<string, { token: string }>;
+
+export const encryptPass = (value: any) => {
+  return value;
+};
 
 @Component({
   standalone: false,
@@ -42,19 +56,36 @@ export class AdminDashboardComponent implements OnInit {
   public userFullNameSliced = 'BIENVENIDO';
   public userFullName = 'BIENVENIDO';
 
-  public resourcesLoaded = true;
+  private _subs2!: Subscription;
+  passWasResetted = signal(false);
+  pass = new FormControl(null!, [required, minLength(8), maxLength(20), withOutSpaces]);
+  repeatPass = new FormControl(null!, [required, minLength(8), maxLength(20), withOutSpaces]);
+  repeatValueWasUpdated = false;
+  cadenasNoCoinciden = true;
+  isLoading = false;
 
   constructor(
     href: ElementRef<HTMLElement>,
     private _modal: TsdModalService,
     private _session: SessionStore,
     private _cd: ChangeDetectorRef,
+    private _toast: TsdToastService,
+    private _http: HttpClient,
+    private _router: Router,
   ) {
     href.nativeElement.classList.add('app-admin-layout');
     effect(() => {
       const savedTheme = localStorage.getItem('theme') || 'dark';
       this.isDarkMode.set(savedTheme === 'dark');
       document.documentElement.setAttribute('data-theme', savedTheme);
+    });
+
+    this._subs2 = this.repeatPass.valueChanges.subscribe((value) => {
+      if (value && !this.repeatValueWasUpdated) this.repeatValueWasUpdated = true;
+      if (this.repeatValueWasUpdated) {
+        if (value !== this.pass.value) this.cadenasNoCoinciden = true;
+        else this.cadenasNoCoinciden = false;
+      }
     });
   }
 
@@ -66,11 +97,18 @@ export class AdminDashboardComponent implements OnInit {
       this.userFullName = _fullName;
       this.userFullNameSliced = _fullName.length > 20 ? `${_fullName.slice(0, 20)}...` : _fullName;
       this.authorities = session.authorities;
-      this.resourcesLoaded = true;
-      this._cd.markForCheck();
+      if (session.passWasResetted) this.passWasResetted.set(session.passWasResetted);
+      else {
+        setTimeout(() => {
+          this.passWasResetted.set(session.passWasResetted);
+        }, 500);
+      }
+      if (session.wasLoaded) {
+        try {
+          subscription.unsubscribe();
+        } catch (error) {}
+      }
     });
-
-    subscription.unsubscribe();
   }
 
   toggleTheme() {
@@ -80,16 +118,50 @@ export class AdminDashboardComponent implements OnInit {
     document.documentElement.setAttribute('data-theme', newTheme);
   }
 
+  public async onSend() {
+    const result = await this.updatePassword(this.pass.value!);
+    result.fold({
+      right: (data) => {
+        localStorage.setItem(STORAGE_KEYS.authToken, data.token);
+        this._toast.success('Ha actualizado la contraseña correctamente');
+        this._subs2.unsubscribe();
+        this._session.clear();
+        this._session.autoInstance();
+      },
+      left: (error) => {
+        this._toast.danger(error);
+        this.isLoading = false;
+        this._cd.markForCheck();
+      },
+    });
+  }
+
   public clickOnLogout(): void {
     this._modal.confirm('¿Desea cerrar su sesión?', '¿Segur@?').subscribe((success) => {
       if (success) {
         clearLocalStorage();
-        location.reload();
+        this._session.clear();
+        this._router.navigate([LOGIN_ROUTE]);
       }
     });
   }
 
   public ngOnDestroy(): void {
     document.getElementsByTagName('html')[0].classList.remove(this._darkThemeClassName);
+    if (this._subs2) this._subs2.unsubscribe();
+  }
+
+  private async updatePassword(newPass: string): Promise<Result> {
+    try {
+      const result = await firstValueFrom(
+        this._http.get<{ token: string }>(
+          `${environment.apiUrlGen}/v1/auth/update-password/${encryptPass(newPass)}`,
+          { params: { wasReset: true } },
+        ),
+      );
+      return Either.right(result);
+    } catch (error) {
+      return Either.left(error);
+    }
   }
 }
