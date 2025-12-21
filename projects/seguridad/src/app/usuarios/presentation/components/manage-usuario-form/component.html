@@ -1,119 +1,128 @@
-<section tak-pretty-box-header>
-  @if (usuario) {
-    <div class="d-flex">
-      <button mat-icon-button style="margin-right: 10px" (click)="onBack.emit()">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <h1 class="ctm-pretty-box--title">{{ isNewUsuario ? 'Agregar' : 'Modificar' }} usuario</h1>
-    </div>
-  } @else {
-    <h1 class="ctm-pretty-box--title">{{ isNewUsuario ? 'Agregar' : 'Modificar' }} usuario</h1>
-  }
-</section>
-<section tak-pretty-box-content>
-  <div class="ctm-pretty-box--content">
-    <div class="row">
-      <div class="col-100">
-        <tsd-remote-autocomplete-field
-          [isDisabled]="usuario ? true : false"
-          #userToEditField
-          [url]="userToEditUrl"
-          [params]="{ isUpdatingUsers: true }"
-          [config]="{ appearance: 'outline' }"
-          [clearSuggestionsOnClearAction]="true"
-          [isUniqResult]="true"
-          value="nombreCompleto"
-          placeholder="Buscar usuario por documento"
-          (onSelect)="onSelectDocumento($event)"
-        />
+<div class="d-flex center">
+  <div class="tsd-pretty-box">
+    <section class="tsd-pretty-box__header" style="min-height: 40px">
+      <div class="d-flex">
+        @if (usuario) {
+          <button mat-icon-button class="margin-right-10px" (click)="onBack.emit()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        }
+        <h1>{{ isNewUsuario ? 'Agregar' : 'Modificar' }} usuario</h1>
       </div>
-      <div class="col-100">
-        <tsd-text-field
-          [formControl]="form.documento"
-          [config]="{ countCaracters: true, maxLength: 15 }"
-        >
-          Documento
-        </tsd-text-field>
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-remote-autocomplete-field
-          #rolField
-          placeholder="Rol"
-          [url]="selectRoleUrl"
-          (onSelect)="form.rol.setValue($event)"
-        />
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-select-field
-          option="forHumans"
-          [suggestions]="estadosUsuarioSuggestions"
-          [formControl]="form.estado"
-        >
-          Estado
-        </tsd-select-field>
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-text-field
-          [formControl]="form.primerNombre"
-          [config]="{ countCaracters: true, maxLength: 100 }"
-        >
-          Primer nombre
-        </tsd-text-field>
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-text-field
-          [formControl]="form.segundoNombre"
-          [config]="{ countCaracters: true, maxLength: 100 }"
-        >
-          Segundo nombre
-        </tsd-text-field>
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-text-field
-          [formControl]="form.primerApellido"
-          [config]="{ countCaracters: true, maxLength: 100 }"
-        >
-          Primer apellido
-        </tsd-text-field>
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-text-field
-          [formControl]="form.segundoApellido"
-          [config]="{ countCaracters: true, maxLength: 100 }"
-        >
-          Segundo apellido
-        </tsd-text-field>
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-text-field
-          [formControl]="form.numeroCelular"
-          [config]="{ countCaracters: true, maxLength: 10 }"
-        >
-          Celular
-        </tsd-text-field>
-      </div>
-      <div class="col-100 col-md-50">
-        <tsd-text-field
-          [formControl]="form.email"
-          [config]="{ countCaracters: true, maxLength: 50 }"
-        >
-          Email
-        </tsd-text-field>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section tak-pretty-box-footer>
-  <div class="ctm-pretty-box--footer align-center">
-    <button mat-button color="accent" [disabled]="form.invalid" (click)="onSave()">
-      {{ isNewUsuario ? 'REGISTRAR' : 'MODIFICAR' }}
-    </button>
+    <mat-divider />
 
-    @if (!isNewUsuario) {
-      <button mat-button color="accent" (click)="onResetPass()" [disabled]="!form.id.value">
-        RESTAURAR PASSWORD
+    <section class="tsd-pretty-box__content" style="max-height: calc(100vh - 240px)">
+      <div class="row">
+        <div class="col-100">
+          <tsd-remote-autocomplete-field
+            #userToEditField
+            [disabled]="usuario ? true : false"
+            [url]="userToEditUrl"
+            [params]="{ isUpdatingUsers: true }"
+            [config]="{ appearance: 'outline', value: 'nombreCompleto' }"
+            [clearSuggestionsOnClearAction]="true"
+            [isUniqResult]="true"
+            placeholder="Buscar usuario por documento"
+            (onSelect)="onSelectDocumento($event)"
+          />
+        </div>
+        <div class="col-100">
+          <tsd-text-field
+            [formControl]="form.documento"
+            [config]="{ countCaracters: true, maxLength: 15 }"
+          >
+            Documento
+          </tsd-text-field>
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-remote-autocomplete-field
+            #rolField
+            placeholder="Rol"
+            [url]="selectRoleUrl"
+            [config]="{ complement: 'codigo', complementType: 2 }"
+            (onSelect)="form.rol.setValue($event)"
+          />
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-select-field
+            option="forHumans"
+            [suggestions]="estadosUsuarioSuggestions"
+            [formControl]="form.estado"
+          >
+            Estado
+          </tsd-select-field>
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-text-field
+            [formControl]="form.primerNombre"
+            [config]="{ countCaracters: true, maxLength: 100 }"
+          >
+            Primer nombre
+          </tsd-text-field>
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-text-field
+            [formControl]="form.segundoNombre"
+            [config]="{ countCaracters: true, maxLength: 100 }"
+          >
+            Segundo nombre
+          </tsd-text-field>
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-text-field
+            [formControl]="form.primerApellido"
+            [config]="{ countCaracters: true, maxLength: 100 }"
+          >
+            Primer apellido
+          </tsd-text-field>
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-text-field
+            [formControl]="form.segundoApellido"
+            [config]="{ countCaracters: true, maxLength: 100 }"
+          >
+            Segundo apellido
+          </tsd-text-field>
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-text-field
+            [formControl]="form.numeroCelular"
+            [config]="{ countCaracters: true, maxLength: 10 }"
+          >
+            Celular
+          </tsd-text-field>
+        </div>
+        <div class="col-100 col-md-50">
+          <tsd-text-field
+            [formControl]="form.email"
+            [config]="{ countCaracters: true, maxLength: 50 }"
+          >
+            Email
+          </tsd-text-field>
+        </div>
+      </div>
+    </section>
+
+    <mat-divider />
+
+    <section class="tsd-pretty-box__footer d-flex center">
+      <button matButton color="accent" [disabled]="form.invalid" (click)="onSave()">
+        {{ isNewUsuario ? 'REGISTRAR' : 'MODIFICAR' }}
       </button>
-    }
+
+      @if (!isNewUsuario) {
+        <button
+          matButton
+          color="warn"
+          class="margin-left-10px"
+          (click)="onResetPass()"
+          [disabled]="!form.id.value"
+        >
+          RESTAURAR PASSWORD
+        </button>
+      }
+    </section>
   </div>
-</section>
+</div>

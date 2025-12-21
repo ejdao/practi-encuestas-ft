@@ -8,19 +8,19 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { APP_NAVIGATION } from 'src/app/app.navigation';
-import { TsdModalService } from '@toshida/ng-components/modal';
-import { clearLocalStorage } from '@common/services';
-import { SessionStore } from '@stores/session';
-import { LOGIN_ROUTE, STORAGE_KEYS } from '@common/constants';
+import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { clearLocalStorage } from '@common/services';
+import { LOGIN_ROUTE, STORAGE_KEYS } from '@common/constants';
+import { TsdModalService } from '@toshida/ng-components/modal';
 import { maxLength, minLength, required, withOutSpaces } from '@toshida/ng-components/fields';
 import { TsdToastService } from '@toshida/ng-components/toast';
-import { Router } from '@angular/router';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { APP_NAVIGATION } from 'src/app/app.navigation';
+import { SEG_END_POINTS } from '@seguridad/end-points';
+import { SessionStore } from '@stores/session';
 import { Either } from '@kato-lee/utilities';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '@environments/environment';
 
 type Result = Either<string, { token: string }>;
 
@@ -155,7 +155,7 @@ export class AdminDashboardComponent implements OnInit {
     try {
       const result = await firstValueFrom(
         this._http.get<{ token: string }>(
-          `${environment.apiUrlGen}/v1/auth/update-password/${encryptPass(newPass)}`,
+          `${SEG_END_POINTS.V1.AUTH}/update-password/${encryptPass(newPass)}`,
           { params: { wasReset: true } },
         ),
       );

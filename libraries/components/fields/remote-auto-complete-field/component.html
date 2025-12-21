@@ -38,14 +38,18 @@
 
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
       @for (option of suggestions; track $index) {
-        <mat-option [value]="option[value]" (onSelectionChange)="emit($event, option)">
-          {{ hasComplement && option[complement] ? option[complement] : '' }}
-          {{
-            option[complement]
-              ? '
-      - '
-              : ''
-          }}{{ option[value] }}
+        <mat-option
+          [value]="option[config.value!]"
+          (onSelectionChange)="emit($event, option)"
+          [title]="option[config.value!]"
+        >
+          @if (config.complement && config.complementType && config.complementType === 1) {
+            {{ option[config.complement] }} -
+          }
+          {{ option[config.value!] }}
+          @if (config.complement && config.complementType && config.complementType === 2) {
+            <span class="tsd-option-span-extra">{{ option[config.complement] }}</span>
+          }
         </mat-option>
       }
     </mat-autocomplete>

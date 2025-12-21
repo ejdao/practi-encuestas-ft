@@ -20,7 +20,12 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { debounceTime, map, Observable, Subject, takeUntil } from 'rxjs';
-import { TSD_DEFAULT_APPEARANCE_FORM, TSD_FIELDS_PRESS_ESC_KEY, TsdConfigFieldI } from '../common';
+import {
+  TSD_DEFAULT_APPEARANCE_FORM,
+  TSD_FIELDS_PRESS_ESC_KEY,
+  TsdConfigAutoCompleteFieldI,
+  TsdConfigFieldI,
+} from '../common';
 import { MatOptionModule, MatOptionSelectionChange } from '@toshida/material/core';
 import { MatProgressSpinnerModule } from '@toshida/material/progress-spinner';
 import { MatAutocompleteModule } from '@toshida/material/autocomplete';
@@ -49,7 +54,7 @@ import { TsdErrorComponent } from '../error/component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  @Input() config: TsdConfigFieldI = {};
+  @Input() config: TsdConfigAutoCompleteFieldI = {};
   @Input() disabled = false;
   @Input() placeholder = '';
 

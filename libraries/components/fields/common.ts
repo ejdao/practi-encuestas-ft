@@ -31,3 +31,9 @@ export interface TsdConfigFieldI {
   emitOnKeyUp?: boolean;
   color?: ThemePalette;
 }
+
+export interface TsdConfigAutoCompleteFieldI extends TsdConfigFieldI {
+  complementType?: 1 | 2;
+  complement?: string;
+  value?: string;
+}

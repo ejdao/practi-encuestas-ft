@@ -38,23 +38,24 @@
       </button>
     }
     <mat-autocomplete #auto="matAutocomplete">
-      @for (suggestion of filteredOptions | async; track suggestion) {
+      @for (option of filteredOptions | async; track option) {
         <mat-option
-          [value]="suggestion[option]"
-          [class.tak-option-extra]="extraInfo"
+          [value]="option[config.value!]"
           (onSelectionChange)="emit($event)"
-          (click)="emitWithClick(suggestion)"
-          title="{{ suggestion[option] }} {{ extraInfo ? '(' + suggestion[extraInfo] + ')' : '' }}"
+          (click)="emitWithClick(option)"
+          [title]="option[config.value!]"
         >
-          <span>{{ suggestion[option] }}</span>
-          @if (extraInfo) {
-            <span class="tsd-option-span-extra">{{ suggestion[extraInfo] }}</span>
+          @if (notSuggestions) {
+            <span class="tsd-auto-complete-not-records"> No se encuentran resultados </span>
+          } @else {
+            @if (config.complement && config.complementType && config.complementType === 1) {
+              {{ option[config.complement] }} -
+            }
+            {{ option[config.value!] }}
+            @if (config.complement && config.complementType && config.complementType === 2) {
+              <span class="tsd-option-span-extra">{{ option[config.complement] }}</span>
+            }
           }
-        </mat-option>
-      }
-      @if (notSuggestions) {
-        <mat-option>
-          <span class="tsd-auto-complete-not-records"> No se encuentran resultados </span>
         </mat-option>
       }
     </mat-autocomplete>

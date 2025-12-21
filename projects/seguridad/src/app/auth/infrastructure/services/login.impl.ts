@@ -1,10 +1,10 @@
+import { firstValueFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { LoginService } from '@seguridad/auth/application/services';
 import { LoginPayload } from '@seguridad/auth/application/payloads';
 import { LoginI } from '@seguridad/auth/domain/models';
-import { environment } from '@environments/environment';
+import { SEG_END_POINTS } from '@seguridad/end-points';
 import { LoginRes } from '../responses';
 
 const encryptPass = (val: string) => val;
@@ -19,7 +19,7 @@ export class LoginImpl implements LoginService {
     (payload as any).context = 'DEFAULT';
 
     return firstValueFrom(
-      this._http.post<LoginRes>(`${environment.apiUrlGen}/v1/auth/login`, payload, {
+      this._http.post<LoginRes>(`${SEG_END_POINTS.V1.AUTH}/login`, payload, {
         params: { fromMobile },
       }),
     );

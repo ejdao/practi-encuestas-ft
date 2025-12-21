@@ -8,8 +8,15 @@ import {
   OnInit,
   Input,
 } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, firstValueFrom, takeUntil } from 'rxjs';
+import {
+  TSD_DEFAULT_APPEARANCE_FORM,
+  TSD_FIELDS_PRESS_ESC_KEY,
+  TsdConfigFieldI,
+  TsdConfigAutoCompleteFieldI,
+} from '../common';
 import { MatProgressSpinnerModule } from '@toshida/material/progress-spinner';
 import { MatAutocompleteModule } from '@toshida/material/autocomplete';
 import { MatFormFieldModule } from '@toshida/material/form-field';
@@ -19,8 +26,6 @@ import { MatSelectModule } from '@toshida/material/select';
 import { MatButtonModule } from '@toshida/material/button';
 import { MatInputModule } from '@toshida/material/input';
 import { MatIconModule } from '@toshida/material/icon';
-import { TSD_DEFAULT_APPEARANCE_FORM, TSD_FIELDS_PRESS_ESC_KEY, TsdConfigFieldI } from '../common';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   imports: [
@@ -54,22 +59,24 @@ import { HttpClient } from '@angular/common/http';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
-  @Input() config: TsdConfigFieldI = {};
-
-  readonly defaultAppearance = TSD_DEFAULT_APPEARANCE_FORM;
+  @Input() config: TsdConfigAutoCompleteFieldI = {};
+  @Input() disabled = false;
+  @Input() placeholder = '';
 
   @Input() url = '';
   @Input() params: any;
-  @Input() placeholder!: string;
-  @Input() hasComplement = true;
-  @Input() complement = 'codigo';
-  @Input() value = 'nombre';
-  @Input() isDisabled = false;
 
   @Input() showAlert = true;
   @Input() clearSuggestionsOnClearAction = false;
   @Input() acceptNewEntities = false;
   @Input() isUniqResult = false;
+
+  readonly defaultAppearance = TSD_DEFAULT_APPEARANCE_FORM;
+
+  private _unsubscribe$ = new Subject<void>();
+  private _isLoadingItem = false;
+  private _isRequired = true;
+  private _isDisabled = false;
 
   @Input() justSearchOneTime = false;
 
@@ -87,11 +94,6 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
   private _isLoading = false;
   public isValueSelected = false;
 
-  private _unsubscribe$ = new Subject<void>();
-  private _isLoadingItem = false;
-  private _isRequired = true;
-  private _isDisabled = false;
-
   constructor(
     private _http: HttpClient,
     private _cd: ChangeDetectorRef,
@@ -99,7 +101,9 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
   ) {}
 
   public async ngOnInit(): Promise<void> {
-    if (this.isDisabled) this.disable();
+    if (!this.config.value) this.config.value = 'nombre';
+    if (!this.config.complementType) this.config.complementType = 2;
+    if (this.disabled) this.disable();
     else this.enable();
     if (this.justSearchOneTime && !this._queryByFirstTime) await this._ifIsJustOneTime();
     if (!this.justSearchOneTime) this._ifIsNormal();
@@ -135,7 +139,7 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
       .subscribe(async (value) => {
         if (
           value &&
-          !this.suggestions.filter((suggestion) => suggestion[this.value] === value).length
+          !this.suggestions.filter((suggestion) => suggestion[this.config.value!] === value).length
         ) {
           this._isLoading = true;
           this._cd.markForCheck();
@@ -156,10 +160,10 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
               this.newProductAdded = false;
               if (
                 (value as string).toLocaleLowerCase() ===
-                  this.suggestions[0][this.value].toLocaleLowerCase().trim() ||
+                  this.suggestions[0][this.config.value!].toLocaleLowerCase().trim() ||
                 this.isUniqResult
               ) {
-                this.autocomplete.setValue(this.suggestions[0][this.value], {
+                this.autocomplete.setValue(this.suggestions[0][this.config.value!], {
                   emitEvent: false,
                 });
                 this.onSelect.emit(this.suggestions[0]);
@@ -195,7 +199,7 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
         this.autocomplete.setValue(newValue);
       }, 500);
     } else {
-      this.autocomplete.setValue(newValue[this.value], { emitEvent });
+      this.autocomplete.setValue(newValue[this.config.value!], { emitEvent });
     }
   }
 

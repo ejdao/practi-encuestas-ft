@@ -14,10 +14,11 @@ import { TsdRemoteAutoCompleteFieldComponent } from '@toshida/ng-components/fiel
 import { TsdFieldsModule } from '@toshida/ng-components/fields';
 import { TsdToastService } from '@toshida/ng-components/toast';
 import { TsdModalService } from '@toshida/ng-components/modal';
+import { MatDividerModule } from '@toshida/material/divider';
 import { MatButtonModule } from '@toshida/material/button';
 import { MatIconModule } from '@toshida/material/icon';
-import { CreateUsuarioPayload } from '@seguridad/usuarios/application/payloads';
 import { UsuarioCrudProxy } from '@seguridad/usuarios/infrastructure/repositories';
+import { CreateUsuarioPayload } from '@seguridad/usuarios/application/payloads';
 import { UsuarioCrudRepository } from '@seguridad/usuarios/domain/repositories';
 import { UsuarioToEditRes } from '@seguridad/usuarios/infrastructure/responses';
 import { ESTADO_USUARIO_VALUES } from '@seguridad/usuarios/domain/types';
@@ -27,7 +28,7 @@ import { UsuarioCrudController } from '../../controllers';
 import { ManageUsuarioForm } from './form';
 
 @Component({
-  imports: [TsdFieldsModule, MatButtonModule, MatIconModule],
+  imports: [TsdFieldsModule, MatButtonModule, MatDividerModule, MatIconModule],
   providers: [
     { provide: UsuarioCrudRepository, useClass: UsuarioCrudProxy },
     UsuarioCrudController,
