@@ -10,7 +10,7 @@ html {
 
 html {
   --tak-body-color: rgb(0, 0, 0);
-  --tak-body-background-color: rgb(241, 244, 246);
+  --tak-body-background-color: var(--mat-sys-background);
   --tak-loader-double-bounce1: #fcc02e;
   --tak-loader-double-bounce2: #03a9f4;
   --tak-loader-overlay-backdrop-background-color: rgba(0, 0, 0, 0.048);
@@ -50,7 +50,7 @@ html {
 
 [data-theme='dark'] {
   --tak-body-color: rgb(255, 255, 255);
-  --tak-body-background-color: rgb(13, 17, 23);
+  --tak-body-background-color: var(--mat-sys-background);
   --tak-loader-overlay-backdrop-background-color: rgba(255, 255, 255, 0.048);
   --tak-layout-container: rgb(13, 17, 23);
   --tak-layout-scrollbar-thumb-background-color: #333947af;

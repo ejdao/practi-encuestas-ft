@@ -16,7 +16,7 @@ export class LoginImpl implements LoginService {
   public async execute(payload: LoginPayload, fromMobile: boolean): Promise<LoginI> {
     payload.password = encryptPass(payload.password);
     payload.username = encryptPass(payload.username);
-    (payload as any).context = 'DEFAULT';
+    (payload as any).context = payload.context.code;
 
     return firstValueFrom(
       this._http.post<LoginRes>(`${SEG_END_POINTS.V1.AUTH}/login`, payload, {

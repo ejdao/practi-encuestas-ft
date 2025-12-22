@@ -1,11 +1,10 @@
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, firstValueFrom } from 'rxjs';
 import { setSession, sessionState, sessionInitialState } from './store';
 import { decodeToken } from '@common/services/decode-token';
-import { STORE_END_POINTS } from '@stores/end-points';
+import { environment } from '@environments/environment';
 import { STORAGE_KEYS } from '@common/constants';
 import { SessionI } from './interface';
 
@@ -20,7 +19,6 @@ export class SessionStore {
   constructor(
     private store: Store<SessionI>,
     private _http: HttpClient,
-    private _router: Router,
   ) {}
 
   public dispatch(session: { token: string; authorities: string[]; authData: AuthDataI }): void {
@@ -84,6 +82,6 @@ export class SessionStore {
   }
 
   private _fetchMyAuthData(): Promise<AuthDataI> {
-    return firstValueFrom(this._http.get<AuthDataI>(STORE_END_POINTS.V1.CONFIG.MY_AUTH_DATA));
+    return firstValueFrom(this._http.get<AuthDataI>(`${environment.apiUrlGen}/v1/auth/data`));
   }
 }

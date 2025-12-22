@@ -1,5 +1,15 @@
 <tsd-access-control>
   <div class="tsd-default-login-form">
+    @if (contexts()) {
+      <tsd-select-field
+        [config]="{ value: 'forHumans', appearance: 'outline', hasDefaultValue: true }"
+        [formControl]="loginForm.context"
+        [suggestions]="contexts()"
+      >
+        Contexto
+      </tsd-select-field>
+    }
+
     <tsd-text-field
       placeholder="1234"
       [formControl]="loginForm.username"
