@@ -30,6 +30,11 @@ body {
 .tsd-modal__content,
 .mdc-list-item,
 .tsd-table__content .mdc-data-table__cell,
-.mat-mdc-paginator-container {
+.mat-mdc-paginator-container,
+.mat-mdc-select-min-line {
   @extend .default-body-font;
+}
+
+.bolder {
+  font-weight: bolder;
 }
