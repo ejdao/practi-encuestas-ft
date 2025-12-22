@@ -1,6 +1,14 @@
 $MOBILE_RESOLUTION: 900px;
 
-[data-theme='light'] {
+html {
+  --tak-header-height: 50px;
+  --tak-footer-height: 30px;
+  --tak-sidebar-compact-width: 50px;
+  --tak-sidebar-full-width: 240px;
+  --tak-layout-outlet-padding: 20px;
+}
+
+html {
   --tak-body-color: rgb(0, 0, 0);
   --tak-body-background-color: rgb(241, 244, 246);
   --tak-loader-double-bounce1: #fcc02e;
@@ -40,7 +48,7 @@ $MOBILE_RESOLUTION: 900px;
   --tak-divider-border-top-light-color: rgba(214, 214, 214, 0.12);
 }
 
-html {
+[data-theme='dark'] {
   --tak-body-color: rgb(255, 255, 255);
   --tak-body-background-color: rgb(13, 17, 23);
   --tak-loader-overlay-backdrop-background-color: rgba(255, 255, 255, 0.048);
@@ -69,14 +77,6 @@ html {
   --tak-breadcrumb-title-color: #ececec;
   --tak-divider-border-top-light-color: rgba(214, 214, 214, 0.12);
   --tak-divider-border-top-dark-color: rgb(95, 95, 95, 0.4);
-}
-
-html {
-  --tak-header-height: 50px;
-  --tak-footer-height: 30px;
-  --tak-sidebar-compact-width: 50px;
-  --tak-sidebar-full-width: 240px;
-  --tak-layout-outlet-padding: 20px;
 }
 
 body {

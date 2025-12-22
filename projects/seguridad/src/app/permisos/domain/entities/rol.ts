@@ -4,7 +4,7 @@ export class Rol {
   constructor(
     private _id: string,
     private _nombre: string,
-    private _permisos: Permiso[]
+    private _permisos: Permiso[],
   ) {}
 
   get id() {

@@ -3,12 +3,17 @@ import { RolDependienteCode } from '@seguridad/permisos/domain/types';
 
 export interface PermisoResponse {
   id: string;
-  isFromRol: boolean;
-  tipo: TipoPermisoCode;
   codigo: string;
   nombre: string;
   modulo: ModuloRes | null;
   subModulo: ModuloRes | null;
+  tipo: TipoPermisoCode;
+  isFromRol: boolean;
+}
+
+export interface AuthoritiesRes {
+  onlyCodigos: string;
+  permisos: PermisoResponse[];
 }
 
 export interface DependenciaResponse {

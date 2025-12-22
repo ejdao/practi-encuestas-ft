@@ -75,7 +75,7 @@ export class AdminDashboardComponent implements OnInit {
   ) {
     href.nativeElement.classList.add('app-admin-layout');
     effect(() => {
-      const savedTheme = localStorage.getItem('theme') || 'dark';
+      const savedTheme = localStorage.getItem('theme') || 'light';
       this.isDarkMode.set(savedTheme === 'dark');
       document.documentElement.setAttribute('data-theme', savedTheme);
     });

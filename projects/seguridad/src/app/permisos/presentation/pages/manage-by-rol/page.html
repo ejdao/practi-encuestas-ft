@@ -39,9 +39,8 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr
-        has-lines
-        selectable
         mat-row
+        class="selectable"
         *matRowDef="let element; columns: displayedColumns"
         (click)="onSelectRol(element)"
       ></tr>

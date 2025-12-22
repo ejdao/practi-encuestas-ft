@@ -1,7 +1,6 @@
 import { Permiso, Rol } from '@seguridad/permisos/domain/entities';
 
-export interface PermisoRolService {
-  add(permiso: Permiso, rol: Rol): Promise<boolean>;
-
-  remove(permiso: Permiso, rol: Rol): Promise<boolean>;
+export abstract class PermisoRolService {
+  abstract add(permiso: Permiso, rol: Rol): Promise<boolean>;
+  abstract remove(permiso: Permiso, rol: Rol): Promise<boolean>;
 }

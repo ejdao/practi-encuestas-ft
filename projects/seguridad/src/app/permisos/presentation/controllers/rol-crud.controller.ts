@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Either } from '@kato-lee/utilities';
 import { RolRepository } from '@seguridad/permisos/domain/repositories';
 import { Rol } from '@seguridad/permisos/domain/entities';
+import { DataStoredI } from '@common/models';
 
 type Result = Either<string, Rol[]>;
 
@@ -19,7 +20,7 @@ export class RolCrudController {
     }
   }
 
-  public observable(): Observable<Rol[]> {
+  public observable(): Observable<DataStoredI<Rol>> {
     return this._roles.observable();
   }
 }

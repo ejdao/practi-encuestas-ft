@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@toshida/material/dialog';
 import { TsdFieldsModule } from '@toshida/ng-components/fields';
 import { TsdToastService } from '@toshida/ng-components/toast';
@@ -15,6 +15,11 @@ import {
   PermisoProxyRepository,
   RolProxyRepository,
 } from '@seguridad/permisos/infrastructure/repositories';
+import {
+  PermisoRolApplication,
+  PermisoUsuarioApplication,
+} from '@seguridad/permisos/infrastructure/services';
+import { PermisoRolService, PermisoUsuarioService } from '@seguridad/permisos/application/services';
 import { ROLES_DEPENDIENTES_VALUES, RolDependienteType } from '@seguridad/permisos/domain/types';
 import { PermisoRepository, RolRepository } from '@seguridad/permisos/domain/repositories';
 import { Permiso, Rol, Usuario } from '@seguridad/permisos/domain/entities';
@@ -37,7 +42,9 @@ import {
     MatDividerModule,
   ],
   providers: [
+    { provide: PermisoUsuarioService, useClass: PermisoUsuarioApplication },
     { provide: PermisoRepository, useClass: PermisoProxyRepository },
+    { provide: PermisoRolService, useClass: PermisoRolApplication },
     { provide: RolRepository, useClass: RolProxyRepository },
     PermisoUsuarioController,
     PermisoCrudController,
@@ -56,6 +63,7 @@ export class SetPermisosDialog implements OnInit, OnDestroy {
   private _subscription: Subscription;
 
   constructor(
+    href: ElementRef<HTMLElement>,
     public dialogRef: MatDialogRef<SetPermisosDialog>,
     @Inject(MAT_DIALOG_DATA)
     public data: { data: Usuario | Rol; tipoEntidad: 'usuario' | 'rol' },
@@ -64,6 +72,7 @@ export class SetPermisosDialog implements OnInit, OnDestroy {
     private _permisosCrud: PermisoCrudController,
     private _toast: TsdToastService,
   ) {
+    href.nativeElement.classList.add('app-set-permisos-dialog');
     this._subscription = this.filter.valueChanges.subscribe((value) => {
       this.dataSource.filter = value!.trim().toLowerCase();
     });

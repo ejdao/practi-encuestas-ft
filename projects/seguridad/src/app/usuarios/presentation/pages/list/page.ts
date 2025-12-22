@@ -4,6 +4,8 @@ import {
   ViewChild,
   Component,
   OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TsdTextFieldComponent } from '@toshida/ng-components/fields';
@@ -21,19 +23,20 @@ import { UsuarioCrudRepository } from '@seguridad/usuarios/domain/repositories';
 import { Usuario } from '@seguridad/usuarios/domain/entities';
 import { ManageUsuarioFormComponent } from '../../components/manage-usuario-form';
 import { UsuarioCrudController } from '../../controllers';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   imports: [
+    FormsModule,
+    MatIconModule,
+    MatButtonModule,
     TsdTablesModule,
     TsdTextFieldComponent,
-    FormsModule,
-    MatButtonModule,
-    MatIconModule,
     ManageUsuarioFormComponent,
   ],
   providers: [
-    { provide: UsuarioCrudRepository, useClass: UsuarioCrudProxy },
     UsuarioCrudController,
+    { provide: UsuarioCrudRepository, useClass: UsuarioCrudProxy },
   ],
   selector: 'app-usuarios-list-web',
   templateUrl: './page.html',
@@ -41,7 +44,7 @@ import { UsuarioCrudController } from '../../controllers';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class Page implements OnInit {
+export class Page implements OnInit, OnDestroy {
   showTable = true;
   usuarioSelected!: Usuario;
 
@@ -55,12 +58,14 @@ export class Page implements OnInit {
 
   private _myDocument!: string;
   private _wasUpdated = false;
+  private _unsubscribe$ = new Subject<void>();
 
   constructor(
     private _ctrl: UsuarioCrudController,
     private _toast: TsdToastService,
     private _modal: TsdModalService,
     private _session: SessionStore,
+    private _cd: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -116,8 +121,7 @@ export class Page implements OnInit {
     this.filter = '';
 
     this.isLoading = true;
-    const result = await this._ctrl.fetch(refresh);
-    this.isLoading = false;
+    await this._ctrl.fetch(refresh);
   }
 
   public async onRefresh(): Promise<void> {
@@ -125,14 +129,24 @@ export class Page implements OnInit {
   }
 
   private _subscribeToUsuariosDataChanges(): void {
-    this._ctrl.observable().subscribe((el) => {
-      this._instanceTable(el.data.filter((d) => d.documento !== this._myDocument));
-    });
+    this._ctrl
+      .observable()
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe((el) => {
+        this._instanceTable(el.data.filter((d) => d.documento !== this._myDocument));
+        this.isLoading = false;
+        this._cd.markForCheck();
+      });
   }
 
   private _instanceTable(usuarios: Usuario[]): void {
     this.dataSource = new MatTableDataSource<Usuario>(usuarios);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  public ngOnDestroy(): void {
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
   }
 }

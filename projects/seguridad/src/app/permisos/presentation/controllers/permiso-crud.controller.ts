@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Either } from '@kato-lee/utilities';
-import { PermisoCrud } from '@seguridad/permisos/application/interactors';
-import { Permiso } from '@seguridad/permisos/domain/entities';
+import { DataStoredI } from '@common/models';
 import { PermisoRepository } from '@seguridad/permisos/domain/repositories';
+import { Permiso } from '@seguridad/permisos/domain/entities';
+import { Either } from '@kato-lee/utilities';
 
 type Result = Either<boolean, Permiso[]>;
 
@@ -20,7 +20,7 @@ export class PermisoCrudController {
     }
   }
 
-  public observable(): Observable<Permiso[]> {
+  public observable(): Observable<DataStoredI<Permiso>> {
     return this._usuarios.observable();
   }
 }

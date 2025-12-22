@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, map, Observable, tap } from 'rxjs';
+import { firstValueFrom, map, Observable, tap } from 'rxjs';
 import { RolRepository } from '@seguridad/permisos/domain/repositories';
 import { Rol } from '@seguridad/permisos/domain/entities';
 import { SEG_END_POINTS } from '@seguridad/end-points';
 import { dataToRol } from '../factories/rol.factory';
+import { rolesObs$, rolesSubj } from './_stores';
+import { DataStoredI } from '@common/models';
 import { RolRes } from '../data-transfers';
 
 @Injectable()
 export class RolProxyRepository implements RolRepository {
   constructor(private _http: HttpClient) {}
 
-  private _roles = new BehaviorSubject<Rol[]>([]);
-  private _roles$ = this._roles.asObservable();
-
   public async fetch(refresh = false): Promise<Rol[]> {
-    if (!refresh && this._roles.value.length) return this._roles.value;
+    if (rolesSubj.value.updatedAt && !refresh) return rolesSubj.value.data;
 
     return firstValueFrom(
       this._http
@@ -27,13 +26,13 @@ export class RolProxyRepository implements RolRepository {
         .pipe(
           map((response) => dataToRol(response)),
           tap((roles) => {
-            this._roles.next(roles);
+            rolesSubj.next(new DataStoredI(roles, new Date()));
           }),
         ),
     );
   }
 
-  public observable(): Observable<Rol[]> {
-    return this._roles$;
+  public observable(): Observable<DataStoredI<Rol>> {
+    return rolesObs$;
   }
 }

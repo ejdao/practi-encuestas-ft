@@ -238,6 +238,10 @@ export class TsdRemoteAutocompleteFieldComponent implements OnInit, OnDestroy {
     this.newProductAdded = true;
   }
 
+  async refresh() {
+    this._ifIsJustOneTime();
+  }
+
   public ngOnDestroy(): void {
     this._unsubscribe$.next();
     this._unsubscribe$.complete();

@@ -1,36 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Either } from '@kato-lee/utilities';
-import { PermisoUsuarioApplication } from '@seguridad/permisos/infrastructure/services';
-import { PermisoUsuario } from '@seguridad/permisos/application/interactors';
 import { Permiso, Usuario } from '@seguridad/permisos/domain/entities';
+import { PermisoUsuarioService } from '@seguridad/permisos/application/services';
 
 type Result = Either<boolean, boolean>;
 
 @Injectable()
 export class PermisoUsuarioController {
-  constructor(private _usuarios: PermisoUsuarioApplication) {}
+  constructor(private _usuarios: PermisoUsuarioService) {}
 
   public async addPermiso(permiso: Permiso, usuario: Usuario): Promise<Result> {
     try {
-      const permisoUsuario = new PermisoUsuario(this._usuarios);
-
-      const result = await permisoUsuario.add(permiso, usuario);
-
+      const result = await this._usuarios.addPermiso(permiso, usuario);
       return Either.right(result);
-    } catch (_) {
-      return Either.left(false);
+    } catch (error) {
+      return Either.left(error);
     }
   }
 
   public async removePermiso(permiso: Permiso, usuario: Usuario): Promise<Result> {
     try {
-      const permisoUsuario = new PermisoUsuario(this._usuarios);
-
-      const result = await permisoUsuario.remove(permiso, usuario);
-
+      const result = await this._usuarios.removePermiso(permiso, usuario);
       return Either.right(result);
-    } catch (_) {
-      return Either.left(false);
+    } catch (error) {
+      return Either.left(error);
     }
   }
 }

@@ -3,7 +3,7 @@ export type EstadoUsuarioCode = 1;
 export class EstadoUsuarioLevel {
   constructor(
     private _code: EstadoUsuarioCode,
-    private _label: string
+    private _label: string,
   ) {}
 
   public get code(): EstadoUsuarioCode {

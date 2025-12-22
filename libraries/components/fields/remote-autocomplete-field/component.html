@@ -29,6 +29,11 @@
         <mat-icon>close</mat-icon>
       </button>
     }
+    @if (!autocomplete.value && config.justSearchOneTime) {
+      <button mat-icon-button matSuffix (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    }
     @if (autocomplete.value && canAddNewProduct && !this.newProductAdded && acceptNewEntities) {
       <button
         [disabled]="formIsDisabled"

@@ -36,7 +36,7 @@ import { RolCrudController } from '../../controllers';
     SetPermisosDialogService,
     { provide: RolRepository, useClass: RolProxyRepository },
   ],
-  selector: 'app-manage-by-rol-web',
+  selector: 'app-manage-permiso-by-rol-web',
   templateUrl: './page.html',
   styleUrls: ['./page.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -60,7 +60,7 @@ export class Page implements OnInit, OnDestroy {
     private _rolesCrud: RolCrudController,
     private _cd: ChangeDetectorRef,
   ) {
-    href.nativeElement.classList.add('app-manage-by-rol-web');
+    href.nativeElement.classList.add('app-manage-permiso-by-rol-web');
   }
 
   public ngOnInit(): void {
@@ -80,7 +80,7 @@ export class Page implements OnInit, OnDestroy {
       .observable()
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe((roles) => {
-        this._instanceTable(roles);
+        this._instanceTable(roles.data);
         this._cd.markForCheck();
       });
   }

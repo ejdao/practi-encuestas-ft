@@ -1,12 +1,12 @@
+import { firstValueFrom, map } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom, map } from 'rxjs';
 import { PermisoResponse } from '../data-transfers';
 import { PermisoRolService } from '@seguridad/permisos/application/services';
 import { Permiso, Rol } from '@seguridad/permisos/domain/entities';
 import { SEG_END_POINTS } from '@seguridad/end-points';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class PermisoRolApplication implements PermisoRolService {
   constructor(private _http: HttpClient) {}
 

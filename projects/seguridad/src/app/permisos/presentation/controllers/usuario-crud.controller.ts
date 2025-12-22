@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { UsuarioProxyRepository } from '@seguridad/permisos/infrastructure/repositories';
-import { UsuarioCrud } from '@seguridad/permisos/application/interactors';
 import { Usuario, Permiso } from '@seguridad/permisos/domain/entities';
+import { UsuarioRepository } from '@seguridad/permisos/domain/repositories';
 import { Either } from '@kato-lee/utilities';
+import { DataStoredI } from '@common/models';
 
-type Result = Either<boolean, Usuario[]>;
+type Result = Either<string, Usuario[]>;
 type Result2 = Either<string, Permiso[]>;
 
 @Injectable()
 export class UsuarioCrudController {
-  private _usuariosSaved = new BehaviorSubject<Usuario[]>([]);
-  private _usuarios$ = this._usuariosSaved.asObservable();
-
-  constructor(private _usuarios: UsuarioProxyRepository) {}
+  constructor(private _usuarios: UsuarioRepository) {}
 
   public async fetch(refresh: boolean): Promise<Result> {
     try {
@@ -26,17 +23,14 @@ export class UsuarioCrudController {
 
   public async fetchPermisos(id: string): Promise<Result2> {
     try {
-      const usuarioCrud = new UsuarioCrud(this._usuarios);
-
-      const usuarios = await usuarioCrud.fetchAuthorities(id);
-
+      const usuarios = await this._usuarios.fetchAuthorities(id);
       return Either.right(usuarios);
-    } catch (_) {
-      return Either.left(_);
+    } catch (error) {
+      return Either.left(error);
     }
   }
 
-  public observable(): Observable<Usuario[]> {
-    return this._usuarios$;
+  public observable(): Observable<DataStoredI<Usuario>> {
+    return this._usuarios.observable();
   }
 }
