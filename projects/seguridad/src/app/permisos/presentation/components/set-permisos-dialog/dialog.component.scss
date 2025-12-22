@@ -1,0 +1,14 @@
+.gcm-set-permisos-dialog {
+  & .bolder {
+    font-weight: bolder;
+  }
+  & .titlecommerce {
+    font-weight: 'titlecommerce';
+  }
+}
+
+.gcm-set-permisos-dialog--mat-checkbox {
+  .mat-checkbox-layout {
+    white-space: normal;
+  }
+}

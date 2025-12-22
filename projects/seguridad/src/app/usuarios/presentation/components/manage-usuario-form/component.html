@@ -19,14 +19,18 @@
           <tsd-remote-autocomplete-field
             #userToEditField
             [disabled]="usuario ? true : false"
-            [url]="userToEditUrl"
-            [params]="{ isUpdatingUsers: true }"
-            [config]="{ appearance: 'outline', value: 'nombreCompleto' }"
+            [config]="{
+              url: userToEditUrl,
+              params: { isUpdatingUsers: true },
+              appearance: 'outline',
+              value: 'nombreCompleto',
+            }"
             [clearSuggestionsOnClearAction]="true"
             [isUniqResult]="true"
-            placeholder="Buscar usuario por documento"
             (onSelect)="onSelectDocumento($event)"
-          />
+          >
+            Buscar usuario por documento
+          </tsd-remote-autocomplete-field>
         </div>
         <div class="col-100">
           <tsd-text-field
@@ -39,11 +43,11 @@
         <div class="col-100 col-md-50">
           <tsd-remote-autocomplete-field
             #rolField
-            placeholder="Rol"
-            [url]="selectRoleUrl"
-            [config]="{ complement: 'codigo', complementType: 2 }"
+            [config]="{ url: selectRoleUrl, complement: 'codigo', complementType: 2 }"
             (onSelect)="form.rol.setValue($event)"
-          />
+          >
+            rol
+          </tsd-remote-autocomplete-field>
         </div>
         <div class="col-100 col-md-50">
           <tsd-select-field

@@ -10,7 +10,7 @@ import {
   Output,
   Input,
 } from '@angular/core';
-import { TsdRemoteAutoCompleteFieldComponent } from '@toshida/ng-components/fields';
+import { TsdRemoteAutocompleteFieldComponent } from '@toshida/ng-components/fields';
 import { TsdFieldsModule } from '@toshida/ng-components/fields';
 import { TsdToastService } from '@toshida/ng-components/toast';
 import { TsdModalService } from '@toshida/ng-components/modal';
@@ -43,8 +43,8 @@ export class ManageUsuarioFormComponent implements OnInit, OnDestroy {
   @Output() onBack = new EventEmitter();
   @Output() onUpdate = new EventEmitter<CreateUsuarioPayload>();
 
-  @ViewChild('userToEditField') userToEditField!: TsdRemoteAutoCompleteFieldComponent;
-  @ViewChild('rolField') rolField!: TsdRemoteAutoCompleteFieldComponent;
+  @ViewChild('userToEditField') userToEditField!: TsdRemoteAutocompleteFieldComponent;
+  @ViewChild('rolField') rolField!: TsdRemoteAutocompleteFieldComponent;
   userToEditUrl = SEG_END_POINTS.V1.USUARIOS;
   selectRoleUrl = SEG_END_POINTS.V1.ROLES;
   form = new ManageUsuarioForm();

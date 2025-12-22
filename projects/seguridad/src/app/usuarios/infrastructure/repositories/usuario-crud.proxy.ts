@@ -1,13 +1,13 @@
-import { BehaviorSubject, firstValueFrom, map, Observable, tap } from 'rxjs';
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FetchUsuarioRes } from '../responses';
-import { usuarioResToEntity } from '../factories';
+import { BehaviorSubject, firstValueFrom, map, Observable, tap } from 'rxjs';
+import { CreateUsuarioPayload } from '@seguridad/usuarios/application/payloads';
 import { UsuarioCrudRepository } from '@seguridad/usuarios/domain/repositories';
 import { Usuario } from '@seguridad/usuarios/domain/entities';
 import { SEG_END_POINTS } from '@seguridad/end-points';
+import { usuarioResToEntity } from '../factories';
+import { FetchUsuarioRes } from '../responses';
 import { DataStoredI } from '@common/models';
-import { CreateUsuarioPayload } from '@seguridad/usuarios/application/payloads';
 
 @Injectable()
 export class UsuarioCrudProxy implements UsuarioCrudRepository {
