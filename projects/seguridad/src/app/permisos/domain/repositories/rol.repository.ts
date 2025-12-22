@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
 import { Rol } from '../entities';
 
-export interface RolRepository {
-  fetch(refresh: boolean): Promise<Rol[]>;
-
-  observable(): Observable<Rol[]>;
+export abstract class RolRepository {
+  abstract fetch(refresh: boolean): Promise<Rol[]>;
+  abstract observable(): Observable<Rol[]>;
 }

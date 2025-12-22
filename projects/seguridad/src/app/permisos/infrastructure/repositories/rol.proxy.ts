@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom, map, Observable, tap } from 'rxjs';
-import { dataToRol } from '../factories/rol.factory';
-import { RolRes } from '../data-transfers';
 import { RolRepository } from '@seguridad/permisos/domain/repositories';
 import { Rol } from '@seguridad/permisos/domain/entities';
 import { SEG_END_POINTS } from '@seguridad/end-points';
+import { dataToRol } from '../factories/rol.factory';
+import { RolRes } from '../data-transfers';
 
 @Injectable()
 export class RolProxyRepository implements RolRepository {

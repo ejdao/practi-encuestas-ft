@@ -1,4 +1,4 @@
-.gcm-set-permisos-dialog {
+.app-set-permisos-dialog {
   & .bolder {
     font-weight: bolder;
   }
@@ -7,8 +7,20 @@
   }
 }
 
-.gcm-set-permisos-dialog--mat-checkbox {
+.app-set-permisos-dialog--mat-checkbox {
   .mat-checkbox-layout {
     white-space: normal;
+  }
+}
+
+.app-modal__top-container-custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &-title {
+    font-family: 'titlecommerce';
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
   }
 }

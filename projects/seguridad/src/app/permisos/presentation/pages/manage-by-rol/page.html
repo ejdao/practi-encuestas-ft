@@ -1,1 +1,63 @@
-<p>Gestionar por rol works</p>
+<div class="tsd-table__container">
+  <div class="tsd-table__header">
+    <div class="tsd-table__header--right">
+      <span class="tsd-table-title">Roles de la aplicación</span>
+      <span class="tsd-table-subtitle">{{ dataSource.data.length }} roles</span>
+    </div>
+    <div class="tsd-table__header--left d-flex">
+      <button mat-icon-button (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="tsd-table__sub-header">
+    <div class="tsd-table__filter">
+      <tsd-text-field [formControl]="filter"> Buscar </tsd-text-field>
+    </div>
+  </div>
+
+  <div class="tsd-table__content paginator-bottom">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      multiTemplateDataRows
+      [class.d-none]="!dataSource.data.length || isLoading || !dataSource.filteredData.length"
+      matSort
+    >
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+        <td mat-cell *matCellDef="let element" class="col-80">
+          <span style="margin-left: 20px">{{ element.nombre }} </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cantidadPermisos">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Permisos</th>
+        <td mat-cell *matCellDef="let element" class="col-20">{{ element.permisos.length }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        has-lines
+        selectable
+        mat-row
+        *matRowDef="let element; columns: displayedColumns"
+        (click)="onSelectRol(element)"
+      ></tr>
+    </table>
+    @if (!dataSource.data.length || !dataSource.filteredData.length || isLoading) {
+      <tsd-table-no-records [isLoading]="isLoading" [dataSource]="dataSource">
+      </tsd-table-no-records>
+    }
+  </div>
+
+  <div class="tsd-table__paginator">
+    <div></div>
+    <mat-paginator
+      [pageSizeOptions]="[30]"
+      showFirstLastButtons
+      [hidePageSize]="true"
+    ></mat-paginator>
+  </div>
+</div>

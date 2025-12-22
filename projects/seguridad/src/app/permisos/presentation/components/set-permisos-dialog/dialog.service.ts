@@ -11,8 +11,6 @@ export class SetPermisosDialogService {
     return this._dialog.open(SetPermisosDialog, {
       data: { data, tipoEntidad },
       disableClose: true,
-      minWidth: '100vw',
-      minHeight: '100vh',
     });
   }
 }

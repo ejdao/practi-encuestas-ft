@@ -1,21 +1,49 @@
+import { Subscription } from 'rxjs';
+import { FormControl } from '@angular/forms';
 import { Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@toshida/material/dialog';
+import { TsdFieldsModule } from '@toshida/ng-components/fields';
+import { TsdToastService } from '@toshida/ng-components/toast';
+import { MatCheckboxModule } from '@toshida/material/checkbox';
+import { MatTableDataSource } from '@toshida/material/table';
+import { MatDividerModule } from '@toshida/material/divider';
+import { MatToolbarModule } from '@toshida/material/toolbar';
+import { MatButtonModule } from '@toshida/material/button';
+import { MatRadioModule } from '@toshida/material/radio';
+import { MatIconModule } from '@toshida/material/icon';
+import {
+  PermisoProxyRepository,
+  RolProxyRepository,
+} from '@seguridad/permisos/infrastructure/repositories';
+import { ROLES_DEPENDIENTES_VALUES, RolDependienteType } from '@seguridad/permisos/domain/types';
+import { PermisoRepository, RolRepository } from '@seguridad/permisos/domain/repositories';
+import { Permiso, Rol, Usuario } from '@seguridad/permisos/domain/entities';
+import { cloneDeep } from '@kato-lee/utilities';
 import {
   PermisoCrudController,
   PermisoRolController,
   PermisoUsuarioController,
 } from '../../controllers';
-import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@toshida/material/dialog';
-import { TsdToastService } from '@toshida/ng-components/toast';
-import { MatTableDataSource } from '@toshida/material/table';
-import { ROLES_DEPENDIENTES_VALUES, RolDependienteType } from '@seguridad/permisos/domain/types';
-import { Permiso, Rol, Usuario } from '@seguridad/permisos/domain/entities';
-import { cloneDeep } from '@kato-lee/utilities';
 
 @Component({
-  standalone: false,
-  selector: 'gcm-set-permisos-dialog',
+  imports: [
+    MatIconModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatToolbarModule,
+    MatRadioModule,
+    TsdFieldsModule,
+    MatButtonModule,
+    MatDividerModule,
+  ],
+  providers: [
+    { provide: PermisoRepository, useClass: PermisoProxyRepository },
+    { provide: RolRepository, useClass: RolProxyRepository },
+    PermisoUsuarioController,
+    PermisoCrudController,
+    PermisoRolController,
+  ],
+  selector: 'app-set-permisos-dialog',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
