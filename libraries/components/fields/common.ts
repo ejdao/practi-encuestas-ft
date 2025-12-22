@@ -33,7 +33,10 @@ export interface TsdConfigFieldI {
 }
 
 export interface TsdConfigAutoCompleteFieldI extends TsdConfigFieldI {
+  url?: string;
+  params?: any;
   complementType?: 1 | 2;
   complement?: string;
   value?: string;
+  justSearchOneTime?: boolean;
 }

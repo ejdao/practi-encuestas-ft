@@ -14,7 +14,6 @@ import { Subject, debounceTime, distinctUntilChanged, firstValueFrom, takeUntil 
 import {
   TSD_DEFAULT_APPEARANCE_FORM,
   TSD_FIELDS_PRESS_ESC_KEY,
-  TsdConfigFieldI,
   TsdConfigAutoCompleteFieldI,
 } from '../common';
 import { MatProgressSpinnerModule } from '@toshida/material/progress-spinner';
@@ -58,13 +57,10 @@ import { MatIconModule } from '@toshida/material/icon';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
-  @Input() config: TsdConfigAutoCompleteFieldI = {};
+export class TsdRemoteAutocompleteFieldComponent implements OnInit, OnDestroy {
+  @Input() config: TsdConfigAutoCompleteFieldI = { url: '' };
   @Input() disabled = false;
   @Input() placeholder = '';
-
-  @Input() url = '';
-  @Input() params: any;
 
   @Input() showAlert = true;
   @Input() clearSuggestionsOnClearAction = false;
@@ -75,10 +71,8 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
 
   private _unsubscribe$ = new Subject<void>();
   private _isLoadingItem = false;
-  private _isRequired = true;
+  private _required = true;
   private _isDisabled = false;
-
-  @Input() justSearchOneTime = false;
 
   private _queryByFirstTime = false;
 
@@ -102,11 +96,12 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
 
   public async ngOnInit(): Promise<void> {
     if (!this.config.value) this.config.value = 'nombre';
+    if (this.config.hasClearButton === undefined) this.config.hasClearButton = true;
     if (!this.config.complementType) this.config.complementType = 2;
     if (this.disabled) this.disable();
     else this.enable();
-    if (this.justSearchOneTime && !this._queryByFirstTime) await this._ifIsJustOneTime();
-    if (!this.justSearchOneTime) this._ifIsNormal();
+    if (this.config.justSearchOneTime && !this._queryByFirstTime) await this._ifIsJustOneTime();
+    if (!this.config.justSearchOneTime) this._ifIsNormal();
   }
 
   private async _ifIsJustOneTime() {
@@ -115,9 +110,9 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
     try {
       this._queryByFirstTime = true;
       const result = await firstValueFrom(
-        this._http.get<any>(this.url, {
+        this._http.get<any>(this.config.url!, {
           params: {
-            ...this.params,
+            ...this.config.params,
             pattern: undefined,
           },
         }),
@@ -146,9 +141,9 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
 
           try {
             const result = await firstValueFrom(
-              this._http.get<any>(this.url, {
+              this._http.get<any>(this.config.url!, {
                 params: {
-                  ...this.params,
+                  ...this.config.params,
                   pattern: value,
                 },
               }),
@@ -252,8 +247,8 @@ export class TsdRemoteAutoCompleteFieldComponent implements OnInit, OnDestroy {
     return this._isLoading;
   }
 
-  get isRequired() {
-    return this._isRequired;
+  get required() {
+    return this._required;
   }
 
   get formIsDisabled() {

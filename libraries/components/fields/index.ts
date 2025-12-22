@@ -8,8 +8,8 @@ export * from './error/error.msg.pipe';
 export * from './common';
 export * from './validators';
 
-export * from './auto-complete-field/component';
-export * from './remote-auto-complete-field/component';
+export * from './autocomplete-field/component';
+export * from './remote-autocomplete-field/component';
 export * from './select-field/component';
 export * from './text-field/component';
 

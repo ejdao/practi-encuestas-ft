@@ -19,13 +19,8 @@ import {
   NgControl,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { debounceTime, map, Observable, Subject, takeUntil } from 'rxjs';
-import {
-  TSD_DEFAULT_APPEARANCE_FORM,
-  TSD_FIELDS_PRESS_ESC_KEY,
-  TsdConfigAutoCompleteFieldI,
-  TsdConfigFieldI,
-} from '../common';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
+import { TSD_DEFAULT_APPEARANCE_FORM, TsdConfigAutoCompleteFieldI } from '../common';
 import { MatOptionModule, MatOptionSelectionChange } from '@toshida/material/core';
 import { MatProgressSpinnerModule } from '@toshida/material/progress-spinner';
 import { MatAutocompleteModule } from '@toshida/material/autocomplete';
@@ -49,11 +44,11 @@ import { TsdErrorComponent } from '../error/component';
     MatInputModule,
     MatIconModule,
   ],
-  selector: 'tsd-auto-complete-field',
+  selector: 'tsd-autocomplete-field',
   templateUrl: './component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class TsdAutocompleteFieldComponent implements OnInit, OnDestroy, ControlValueAccessor {
   @Input() config: TsdConfigAutoCompleteFieldI = {};
   @Input() disabled = false;
   @Input() placeholder = '';
@@ -71,7 +66,6 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
   private _value = '';
 
   // Exclusivos
-  @Input() option = 'option';
   @Input() extraInfo = '';
   @Input() suggestions: any[] = [];
   @Input() isLoading = false;
@@ -99,6 +93,10 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
   }
 
   public ngOnInit(): void {
+    if (!this.config.value) this.config.value = 'nombre';
+    if (this.config.hasClearButton === undefined) this.config.hasClearButton = true;
+    if (!this.config.complementType) this.config.complementType = 2;
+
     const form: any = this.control;
 
     if (form?._rawValidators) {
@@ -138,7 +136,8 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
       this._value = event.target.value;
       this.onChangeFn(
         this.suggestions.filter(
-          (sug) => `${sug[this.option]}`.toLowerCase() === `${`${this._value}`}`.toLowerCase(),
+          (sug) =>
+            `${sug[this.config.value!]}`.toLowerCase() === `${`${this._value}`}`.toLowerCase(),
         )[0] || null,
       );
       if (!this.control.value && this.config.isHidden) this._decrypted = false;
@@ -181,9 +180,9 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
     const value =
       typeof `${this._value}` === 'string'
         ? `${this._value}`.toLowerCase()
-        : `${this.control.value[this.option]}`.toLowerCase();
+        : `${this.control.value[this.config.value!]}`.toLowerCase();
     const option = this.suggestions.filter((res) =>
-      `${res[this.option]}`.toLowerCase().includes(value),
+      `${res[this.config.value!]}`.toLowerCase().includes(value),
     );
     if (!option.length) this._notSuggestions = true;
     else this._notSuggestions = false;
@@ -198,14 +197,14 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
   /** @exclusivo */
   public emitWithClick(suggestionOption: any) {
     this.control.setValue(suggestionOption);
-    this._value = `${suggestionOption[this.option]}`;
+    this._value = `${suggestionOption[this.config.value!]}`;
     this._isInvalid = false;
   }
 
   /** @exclusivo */
   public setValue(value: any) {
     this.control.setValue(value);
-    this._value = `${value[this.option]}`;
+    this._value = `${value[this.config.value!]}`;
   }
 
   /** @exclusivo */
@@ -215,7 +214,7 @@ export class TsdAutoCompleteFieldComponent implements OnInit, OnDestroy, Control
 
     this.onChangeFn(
       this.suggestions.filter(
-        (sug) => `${sug[this.option]}`.toLowerCase() === `${this._value}`.toLowerCase(),
+        (sug) => `${sug[this.config.value!]}`.toLowerCase() === `${this._value}`.toLowerCase(),
       )[0] || null,
     );
   }

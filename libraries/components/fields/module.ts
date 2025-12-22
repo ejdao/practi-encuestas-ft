@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TsdTextFieldComponent } from './text-field/component';
-import { TsdAutoCompleteFieldComponent } from './auto-complete-field/component';
-import { TsdRemoteAutoCompleteFieldComponent } from './remote-auto-complete-field/component';
+import { TsdAutocompleteFieldComponent } from './autocomplete-field/component';
+import { TsdRemoteAutocompleteFieldComponent } from './remote-autocomplete-field/component';
 import { TsdSelectFieldComponent } from './select-field/component';
 
 const components = [
   FormsModule,
   ReactiveFormsModule,
   TsdTextFieldComponent,
-  TsdAutoCompleteFieldComponent,
-  TsdRemoteAutoCompleteFieldComponent,
+  TsdAutocompleteFieldComponent,
+  TsdRemoteAutocompleteFieldComponent,
   TsdSelectFieldComponent,
 ];
 
