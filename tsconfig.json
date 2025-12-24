@@ -4,6 +4,13 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "@common/*": ["./@common/*"],
+      "@environments/*": ["./@environments/*"],
+      "@toshida/ng-components/*": ["./libraries/components/*"],
+      "@seguridad/*": ["./projects/seguridad/src/app/*"],
+      "@seguridad/auth/*": ["src/app/modules/auth/*"]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -24,5 +31,12 @@
     "strictTemplates": true
   },
   "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.spec.json" }]
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.spec.json" },
+    { "path": "./libraries/components/tsconfig.lib.json" },
+    { "path": "./libraries/components/tsconfig.spec.json" },
+    { "path": "./projects/seguridad/tsconfig.app.json" },
+    { "path": "./projects/seguridad/tsconfig.spec.json" }
+  ]
 }

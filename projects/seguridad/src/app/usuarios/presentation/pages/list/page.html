@@ -1,0 +1,87 @@
+<div class="tsd-table__container tsd-fade-in--300ms" [hidden]="!showTable">
+  <div class="tsd-table__header">
+    <div class="tsd-table__header--right">
+      <span class="tsd-table-title">Usuarios de la aplicación</span>
+    </div>
+    <div class="tsd-table__header--left d-flex">
+      <button mat-icon-button (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="tsd-table__sub-header">
+    <div class="d-flex">
+      <div class="tsd-table__filter">
+        <tsd-text-field
+          type="filter"
+          [(ngModel)]="filter"
+          (ngModelChange)="dataSource.filter = $event"
+        >
+          Buscar
+        </tsd-text-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="tsd-table__content paginator-bottom">
+    <table
+      matSort
+      mat-table
+      [dataSource]="dataSource"
+      multiTemplateDataRows
+      [class.d-none]="!dataSource.data.length || isLoading || !dataSource.filteredData.length"
+    >
+      <ng-container matColumnDef="nombreCompleto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Completo</th>
+        <td mat-cell class="col-50" *matCellDef="let element">
+          <span>{{ element.nombreCompleto }}</span>
+          <span class="tsd-cell__subcontent">Documento: {{ element.documento }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreRol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Rol</th>
+        <td mat-cell class="col-30" *matCellDef="let element">
+          <span> {{ element.rol.nombre }} </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Acciones</th>
+        <td mat-cell class="col-20" *matCellDef="let element">
+          <button mat-icon-button (click)="onUpdateUser(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onResetPass(element.id)">
+            <mat-icon>lock_reset</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+    </table>
+    @if (!dataSource.data.length || !dataSource.filteredData.length || isLoading) {
+      <tsd-table-no-records [isLoading]="isLoading" [dataSource]="dataSource" />
+    }
+  </div>
+
+  <div class="tsd-table__paginator">
+    <div></div>
+    <mat-paginator
+      [pageSizeOptions]="[30]"
+      showFirstLastButtons
+      [hidePageSize]="true"
+    ></mat-paginator>
+  </div>
+</div>
+
+@if (!showTable) {
+  <app-manage-usuario-form
+    class="tsd-fade-in--300ms"
+    [usuario]="usuarioSelected"
+    (onBack)="onBackToTable()"
+    (onUpdate)="onUserUpdated()"
+  />
+}

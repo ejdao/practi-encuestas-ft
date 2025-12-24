@@ -1,0 +1,65 @@
+<div class="tsd-table__container">
+  <div class="tsd-table__header">
+    <div class="tsd-table__header--right">
+      <span class="tsd-table-title">Usuarios de la aplicación</span>
+      <span class="tsd-table-subtitle">{{ dataSource.data.length }} usuarios</span>
+    </div>
+    <div class="tsd-table__header--left d-flex">
+      <button mat-icon-button (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="tsd-table__sub-header">
+    <div class="tsd-table__filter">
+      <tsd-text-field [formControl]="filter"> Buscar </tsd-text-field>
+    </div>
+  </div>
+
+  <div class="tsd-table__content paginator-bottom">
+    <table
+      matSort
+      mat-table
+      [dataSource]="dataSource"
+      multiTemplateDataRows
+      [class.d-none]="!dataSource.data.length || isLoading || !dataSource.filteredData.length"
+    >
+      <ng-container matColumnDef="nombreCompleto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Completo</th>
+        <td mat-cell class="col-50" *matCellDef="let element">
+          <span>{{ element.nombreCompleto }}</span>
+          <span class="tsd-cell__subcontent">Documento: {{ element.numeroDocumento }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreRol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Rol</th>
+        <td mat-cell class="col-50" *matCellDef="let element">
+          <span> {{ element.nombreRol }} </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        mat-row
+        class="selectable"
+        *matRowDef="let element; columns: displayedColumns"
+        (click)="onSelectUsuario(element)"
+      ></tr>
+    </table>
+    @if (!dataSource.data.length || !dataSource.filteredData.length || isLoading) {
+      <tsd-table-no-records [isLoading]="isLoading" [dataSource]="dataSource">
+      </tsd-table-no-records>
+    }
+  </div>
+
+  <div class="tsd-table__paginator">
+    <div></div>
+    <mat-paginator
+      [pageSizeOptions]="[30]"
+      showFirstLastButtons
+      [hidePageSize]="true"
+    ></mat-paginator>
+  </div>
+</div>

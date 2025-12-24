@@ -1,5 +1,11 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { App } from './app/app';
+import { initFederation } from '@angular-architects/native-federation';
+import { environment } from '@environments/environment';
 
-bootstrapApplication(App, appConfig).catch((err) => console.error(err));
+const manifest = !environment.remoteModules
+  ? 'federation/manifest.json'
+  : 'federation/manifest.prod.json';
+
+initFederation(manifest)
+  .catch((err) => console.error(err))
+  .then((_) => import('./bootstrap'))
+  .catch((err) => console.error(err));

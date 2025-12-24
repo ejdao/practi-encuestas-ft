@@ -1,0 +1,97 @@
+.app-admin-layout {
+  &__icon-button {
+    color: inherit !important;
+  }
+  &__header {
+    &--container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+
+  .adly__sidebar {
+    &__toolbar {
+      --background: var(--toolbar-sidebar-background-color);
+      --min-height: 68px !important;
+      color: var(--toolbar-sidebar-color);
+      border-right: 1px solid rgba(255, 255, 255, 0.192);
+    }
+    &__title {
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 420px;
+      margin: -3px 0 0 -70px;
+      & > img {
+        float: left;
+        margin: 4px 0 0 10px;
+      }
+      & > span {
+        float: right;
+        margin-top: 10px;
+      }
+    }
+    &__link {
+      text-decoration: none;
+    }
+    &__accordion {
+      .ion-accordion-toggle-icon {
+        color: var(--sidebar-acorddion-arrow-color);
+      }
+      &-item-name {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        color: var(--color);
+      }
+    }
+    &__custom-disabled-accordion {
+      .ion-accordion-toggle-icon {
+        display: none;
+      }
+    }
+  }
+  .adly__main {
+    &__toolbar {
+      --background: var(--toolbar-principal-background-color);
+      color: var(--toolbar-principal-color);
+      &__icons {
+        color: var(--toolbar-principal-color);
+      }
+      &.footer {
+        height: 40px;
+        & > span {
+          font-weight: bolder;
+          float: right;
+          margin-right: 10px;
+        }
+      }
+    }
+    &__outlet {
+      padding: 10px;
+    }
+    &__header__title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-align: center;
+      text-overflow: ellipsis;
+    }
+  }
+  .gcm__admin-layout__not-exist {
+    display: none !important;
+  }
+  .home__description {
+    font-weight: 600;
+  }
+  .private-form {
+    margin: 10px;
+    border: 1px solid rgb(0, 0, 0, 0.12);
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .logout-btn {
+    margin: 20px;
+  }
+}

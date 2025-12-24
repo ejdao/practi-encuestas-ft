@@ -1,0 +1,75 @@
+<mat-tab-group animationDuration="0ms">
+  <mat-tab label="Crear Modulo">
+    <div class="tab-content">
+      <tsd-text-field [(ngModel)]="modulo.nombre">Nombre del modulo</tsd-text-field>
+
+      <div class="d-flex-center">
+        <button
+          mat-button
+          color="accent"
+          (click)="clicOnCreateModule()"
+          [disabled]="!modulo.nombre"
+        >
+          CREAR
+        </button>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Crear Submodulo">
+    <div class="tab-content">
+      <tsd-remote-autocomplete-field
+        [config]="{ url: remoteUrlModules, justSearchOneTime: true }"
+        (onSelect)="subModulo.modulo = $event"
+      >
+        Modulo
+      </tsd-remote-autocomplete-field>
+
+      <tsd-text-field [(ngModel)]="subModulo.nombre">Nombre del submodulo</tsd-text-field>
+
+      <div class="d-flex-center">
+        <button
+          mat-button
+          color="accent"
+          (click)="clicOnCreateSubModule()"
+          [disabled]="!subModulo.nombre || !subModulo.modulo"
+        >
+          CREAR
+        </button>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Crear permiso">
+    <div class="tab-content">
+      <tsd-remote-autocomplete-field
+        [config]="{ url: remoteUrlModules, justSearchOneTime: true }"
+        (onSelect)="permiso.modulo = $event; permiso.subModulo = null"
+      >
+        Modulo
+      </tsd-remote-autocomplete-field>
+
+      @if (permiso.modulo) {
+        <tsd-autocomplete-field
+          [suggestions]="permiso.modulo.subModulos"
+          [(ngModel)]="permiso.subModulo"
+        >
+          Submodulo
+        </tsd-autocomplete-field>
+      }
+
+      <tsd-text-field [(ngModel)]="permiso.nombre">Nombre del permiso</tsd-text-field>
+
+      <div class="d-flex-center">
+        <button
+          mat-button
+          color="accent"
+          (click)="clicOnCreateAuthority()"
+          [disabled]="!permiso.nombre || (!permiso.modulo && permiso.subModulo)"
+        >
+          CREAR
+        </button>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

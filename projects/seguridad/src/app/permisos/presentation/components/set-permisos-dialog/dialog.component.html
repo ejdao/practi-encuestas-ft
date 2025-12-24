@@ -1,0 +1,49 @@
+<div mat-dialog-title>
+  <div class="app-set-permisos-dialog">
+    <div class="app-modal__top-container-custom">
+      <h1 class="app-modal__top-container-custom-title">
+        <div style="width: 200px; margin-left: 10px; margin-bottom: -15px">
+          <tsd-text-field [formControl]="filter">Filtrar por modulo</tsd-text-field>
+        </div>
+      </h1>
+      <button mat-icon-button (click)="onClose()"><mat-icon>close</mat-icon></button>
+    </div>
+  </div>
+
+  <div mat-dialog-content>
+    @for (permiso of dataSource.filteredData; track $index) {
+      <div>
+        <!-- Modulos -->
+        @if (permiso.tipo.code === 1) {
+          <div>
+            <mat-divider />
+            <div class="bolder default-title-font" style="display: flex; align-items: center">
+              <mat-icon>radio_button_checked</mat-icon> {{ permiso.descripcion }}
+            </div>
+          </div>
+        }
+        <!-- Submodulos -->
+        @if (permiso.tipo.code === 2) {
+          <div>
+            <div class="bolder default-title-font">{{ permiso.descripcion }}</div>
+          </div>
+        }
+        <!-- Permisos -->
+        @if (permiso.tipo.code === 3) {
+          <div>
+            <mat-checkbox
+              class="app-set-permisos-dialog--mat-checkbox"
+              [disabled]="permiso.isByRol === true"
+              [checked]="permiso.isActive"
+              (change)="onTogglePermiso(permiso, $event.checked)"
+            >
+              <span class="default-title-font">
+                {{ permiso.descripcion }}
+              </span>
+            </mat-checkbox>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
