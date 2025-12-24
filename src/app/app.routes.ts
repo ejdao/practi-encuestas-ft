@@ -12,7 +12,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => loadRemoteModule('seguridad', './authMf').then((m) => m.routes),
+        loadChildren: () => import('@seguridad/auth/routes').then((m) => m.routes),
       },
     ],
   },

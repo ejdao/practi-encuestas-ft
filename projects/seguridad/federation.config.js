@@ -4,7 +4,6 @@ module.exports = withNativeFederation({
   name: 'seguridad',
 
   exposes: {
-    './authMf': './projects/seguridad/src/app/auth/routes.ts',
     './mf': './projects/seguridad/src/routes.ts',
   },
 

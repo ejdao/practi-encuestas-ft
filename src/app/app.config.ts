@@ -3,9 +3,10 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { CustomPreloadingStrategy } from './app.preloading.strategy';
 import { ROOT_REDUCERS } from '@stores/state';
 import { provideStore } from '@ngrx/store';
 import { routes } from './app.routes';
@@ -14,7 +15,6 @@ import {
   TimerInterceptor,
   UnauthorizedInterceptor,
 } from '@common/interceptors';
-import { CustomPreloadingStrategy } from './app.preloading.strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [

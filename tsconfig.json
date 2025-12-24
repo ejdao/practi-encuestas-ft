@@ -8,7 +8,8 @@
       "@common/*": ["./@common/*"],
       "@environments/*": ["./@environments/*"],
       "@toshida/ng-components/*": ["./libraries/components/*"],
-      "@seguridad/*": ["./projects/seguridad/src/app/*"]
+      "@seguridad/*": ["./projects/seguridad/src/app/*"],
+      "@seguridad/auth/*": ["src/app/modules/auth/*"]
     },
     "strict": true,
     "noImplicitOverride": true,
