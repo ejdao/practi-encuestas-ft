@@ -9,7 +9,8 @@
       "@environments/*": ["./@environments/*"],
       "@toshida/ng-components/*": ["./libraries/components/*"],
       "@seguridad/*": ["./projects/seguridad/src/app/*"],
-      "@seguridad/auth/*": ["src/app/modules/auth/*"]
+      "@seguridad/auth/*": ["src/app/modules/auth/*"],
+      "@encuestas/*": ["src/app/modules/encuestas/*"]
     },
     "strict": true,
     "noImplicitOverride": true,

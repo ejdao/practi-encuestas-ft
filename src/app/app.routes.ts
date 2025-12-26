@@ -30,6 +30,10 @@ export const routes: Routes = [
         loadChildren: () => loadRemoteModule('seguridad', './mf').then((m) => m.routes),
         data: { title: 'Seguridad', authorities: [GEN_AUTHORITIES.CODE] },
       },
+      {
+        path: 'encuestas',
+        loadChildren: () => import('@encuestas/routes').then((m) => m.routes),
+      },
     ],
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },

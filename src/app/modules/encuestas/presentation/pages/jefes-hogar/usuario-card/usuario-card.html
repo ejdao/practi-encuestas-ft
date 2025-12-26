@@ -1,0 +1,44 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title class="card__title">
+      <span>{{ data.nombreCompleto }}</span>
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content class="card__content">
+    <h6><b>Documento:</b> {{ data.tipoDocumento.getAbbreviation() }}{{ data.numeroDocumento }}</h6>
+    <h6><b>Dirección:</b> {{ data.direccion }}</h6>
+    @if (data.cantViviendasPropias) {
+      <h6><b>Viviendas propias:</b> {{ data.cantViviendasPropias }}</h6>
+    } @else {
+      <h6>No tiene vivienda propia registrada</h6>
+    }
+    @if (data.cantFamiliares) {
+      <h6><b>Familiares:</b> {{ data.cantFamiliares }}</h6>
+    } @else {
+      <h6>No tiene familiares registrados</h6>
+    }
+
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        @if (!data.cantViviendasPropias) {
+          <ion-button (click)="onAddVivienda.emit()">
+            <div class="d-flex-center">
+              <ion-icon name="add-outline"></ion-icon>
+              <ion-icon name="home-outline"></ion-icon>
+            </div>
+          </ion-button>
+        }
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="onAddFamiliar.emit()">
+          <div class="d-flex-center">
+            <ion-icon name="add-outline"></ion-icon>
+            <ion-icon name="people-outline"></ion-icon>
+          </div>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+
+    <span class="numeracion">{{ index }}</span>
+  </ion-card-content>
+</ion-card>

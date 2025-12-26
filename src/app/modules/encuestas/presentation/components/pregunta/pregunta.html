@@ -1,0 +1,215 @@
+@if (pregunta) {
+  <div>
+    <b>
+      {{ pregunta.nombre }}
+      @if (!pregunta.isOpcional && !pregunta.ignored) {
+        <b class="tsd-danger-x--forced">*</b>
+      }
+      @if (pregunta.ignored) {
+        <b> (no requerida)</b>
+      }
+    </b>
+    @if (pregunta.descripcion) {
+      <br />
+      <span>{{ pregunta.descripcion }} </span>
+    }
+  </div>
+
+  <!-- DEPARTAMENTO -->
+  @if (pregunta.tipo === tiposPregunta.DEPARTAMENTO) {
+    <tsd-remote-autocomplete-field
+      #departamentoField
+      [config]="{
+        value: 'nombre',
+        dangerXHidden: true,
+        url: departamentosUrl,
+        params: { paisId: 49 },
+      }"
+      (onSelect)="setValueFromEntidad($event); onValueUpdated()"
+      (onReset)="setValueFromEntidad($event)"
+    ></tsd-remote-autocomplete-field>
+  }
+
+  <!-- MUNICIPIO -->
+  @if (pregunta.tipo === tiposPregunta.MUNICIPIO) {
+    <tsd-remote-autocomplete-field
+      #municipioField
+      [config]="{
+        value: 'nombre',
+        url: municipiosUrl,
+        dangerXHidden: true,
+        params: { departamentoId: raiz.departamentoId.value },
+      }"
+      (onSelect)="setValueFromEntidad($event); onValueUpdated()"
+      (onReset)="setValueFromEntidad($event)"
+    ></tsd-remote-autocomplete-field>
+  }
+
+  <!-- CORREGIMIENTO -->
+  @if (pregunta.tipo === tiposPregunta.CORREGIMIENTO) {
+    <tsd-remote-autocomplete-field
+      #corregimientoField
+      [config]="{
+        value: 'nombre',
+        dangerXHidden: true,
+        url: corregimientosUrl,
+        params: { municipioId: raiz.municipioId.value },
+      }"
+      (onSelect)="setValueFromEntidad($event); onValueUpdated()"
+    ></tsd-remote-autocomplete-field>
+  }
+
+  <!-- OTROS -->
+  @if (
+    [tiposPregunta.TIPO_DOCUMENTO, tiposPregunta.PARENTEZCO, tiposPregunta.EPS].indexOf(
+      pregunta.tipo
+    ) >= 0
+  ) {
+    <tsd-remote-autocomplete-field
+      #ctmTypeField
+      [config]="{
+        url: ctmTypeUrl,
+        value: ctmTypeValue,
+        complement: ctmTypeComplement,
+        dangerXHidden: true,
+        justSearchOneTime: true,
+      }"
+      (onSelect)="setValueFromEntidad($event, true); onValueUpdated()"
+    ></tsd-remote-autocomplete-field>
+  }
+
+  <!-- FECHA -->
+  @if (pregunta.tipo === tiposPregunta.FECHA) {
+    <tsd-date-field
+      [(ngModel)]="pregunta.respuestaIfIsDate"
+      (ngModelChange)="changeIfIsDate(); onValueUpdated()"
+      [disabled]="pregunta.ignored"
+    ></tsd-date-field>
+  }
+
+  <!-- SI/NO -->
+  @if (pregunta.tipo === tiposPregunta.SI_NO) {
+    <mat-radio-group
+      [(ngModel)]="pregunta.respuesta"
+      (ngModelChange)="onValueUpdated()"
+      [disabled]="pregunta.ignored"
+    >
+      <div style="margin-bottom: 10px">
+        <mat-radio-button [value]="true">SI</mat-radio-button><br />
+      </div>
+      <div style="margin-bottom: 10px">
+        <mat-radio-button [value]="false">NO</mat-radio-button><br />
+      </div>
+    </mat-radio-group>
+  }
+  <!-- SELECCIÓN UNICA -->
+  @if (pregunta.tipo === tiposPregunta.SELECCION_UNICA) {
+    <mat-radio-group
+      [(ngModel)]="pregunta.respuesta"
+      (ngModelChange)="onValueUpdated()"
+      [disabled]="pregunta.ignored"
+    >
+      @for (opcion of pregunta.opciones; track $index) {
+        <div style="margin-bottom: 10px">
+          <mat-radio-button [value]="opcion.id">{{ opcion.nombre }}</mat-radio-button
+          ><br />
+        </div>
+      }
+    </mat-radio-group>
+  }
+  <!-- SELECCIÓN MULTIPLE -->
+  @if (pregunta.tipo === tiposPregunta.SELECCION_MULTIPLE) {
+    <section>
+      <mat-checkbox
+        [checked]="
+          pregunta.completed ||
+          pregunta.cantidadOpcionesSeleccionadas === pregunta.limSelMultiOrCarac
+        "
+        [disabled]="pregunta.opciones.length !== pregunta.limSelMultiOrCarac"
+        [indeterminate]="
+          pregunta.cantidadOpcionesSeleccionadas > 0 &&
+          pregunta.cantidadOpcionesSeleccionadas < pregunta.limSelMultiOrCarac
+        "
+        (change)="update($event.checked)"
+      >
+        <b>
+          {{ pregunta.cantidadOpcionesSeleccionadas }} DE
+          {{ pregunta.limSelMultiOrCarac || pregunta.opciones.length }} SELECCIONADAS
+        </b>
+      </mat-checkbox>
+      <br />
+      @for (opcion of pregunta.opciones; track $index) {
+        <mat-checkbox
+          [checked]="opcion.completed"
+          (change)="update($event.checked, $index)"
+          [disabled]="
+            pregunta.cantidadOpcionesSeleccionadas === pregunta.limSelMultiOrCarac &&
+            !opcion.completed
+          "
+        >
+          {{ opcion.nombre }}
+        </mat-checkbox>
+        <br />
+      }
+    </section>
+  }
+  <!-- ABIERTA (LARGA) -->
+  @if (pregunta.tipo === tiposPregunta.ABIERTA_LARGA) {
+    <!-- Text area -->
+    <tsd-text-field
+      appearance="outline"
+      [config]="{
+        maxLength: pregunta.limSelMultiOrCarac || 500,
+        dangerXHidden: true,
+        countCaracters: true,
+      }"
+      [(ngModel)]="pregunta.respuesta"
+      (ngModelChange)="onValueUpdated()"
+      [disabled]="pregunta.ignored"
+    ></tsd-text-field>
+  }
+  <!-- ABIERTA (CORTA) -->
+  @if (pregunta.tipo === tiposPregunta.ABIERTA_CORTA) {
+    <tsd-text-field
+      [config]="{
+        maxLength: pregunta.limSelMultiOrCarac || 500,
+        dangerXHidden: true,
+        countCaracters: true,
+      }"
+      appearance="legacy"
+      [(ngModel)]="pregunta.respuesta"
+      (ngModelChange)="onValueUpdated()"
+      [disabled]="pregunta.ignored"
+    ></tsd-text-field>
+  }
+  <!-- ABIERTA (NUMERICO) -->
+  @if (pregunta.tipo === tiposPregunta.ABIERTA_NUMERICO) {
+    <!-- number field -->
+    <tsd-text-field
+      appearance="legacy"
+      [config]="{
+        maxLength: pregunta.limSelMultiOrCarac,
+        dangerXHidden: true,
+        countCaracters: pregunta.limSelMultiOrCarac ? true : false,
+      }"
+      [(ngModel)]="pregunta.respuesta"
+      [disabled]="pregunta.ignored"
+      (ngModelChange)="onValueUpdated()"
+    ></tsd-text-field>
+  }
+  @if (pregunta.tipo === tiposPregunta.VALOR_MONETARIO) {
+    <!-- money field -->
+    <tsd-text-field
+      appearance="legacy"
+      [config]="{
+        maxLength: pregunta.limSelMultiOrCarac,
+        hasClearButton: true,
+        dangerXHidden: true,
+        countCaracters: pregunta.limSelMultiOrCarac ? true : false,
+      }"
+      [disabled]="pregunta.ignored"
+      [(ngModel)]="pregunta.respuesta"
+      (ngModelChange)="onValueUpdated()"
+    ></tsd-text-field>
+  }
+}

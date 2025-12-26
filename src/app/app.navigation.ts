@@ -1,4 +1,5 @@
 import { SEGURIDAD_SNAV_ITEMS } from '@navigation/seguridad';
+import { ENCUESTAS_SNAV_ITEMS } from '@navigation/encuestas';
 import { TakSnavItems } from '@toshida/ng-components/layouts/admin-takkion';
 
 export const APP_NAVIGATION: TakSnavItems[] = [
@@ -9,4 +10,5 @@ export const APP_NAVIGATION: TakSnavItems[] = [
     url: 'home',
   },
   ...SEGURIDAD_SNAV_ITEMS,
+  ...ENCUESTAS_SNAV_ITEMS,
 ];

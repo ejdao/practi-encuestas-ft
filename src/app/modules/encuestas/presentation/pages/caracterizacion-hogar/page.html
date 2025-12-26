@@ -1,0 +1,79 @@
+@if (encuesta) {
+  <div class="top-container">
+    <div>
+      <b>{{ encuesta.nombre }}</b>
+    </div>
+  </div>
+
+  <div class="ion-padding buttons-container">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button
+          [disabled]="preguntaSeleccionadaIndex === 1"
+          (click)="updateQuestion('previous')"
+        >
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title> P. {{ preguntaSeleccionadaIndex }}/{{ encuesta.preguntas.length }} </ion-title>
+      <ion-buttons slot="end">
+        <ion-button
+          [class.d-none]="preguntaSeleccionadaIndex === encuesta.preguntas.length"
+          [disabled]="
+            (preguntaSeleccionada.tipo !== tiposPregunta.COMPLEMENTADA &&
+              !preguntaSeleccionada.hasRespuesta) ||
+            (preguntaSeleccionada.tipo === tiposPregunta.COMPLEMENTADA &&
+              !preguntaSeleccionada.complementadaHasRespuestas)
+          "
+          (click)="updateQuestion('next')"
+        >
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </ion-button>
+        <ion-button
+          [class.d-none]="preguntaSeleccionadaIndex !== encuesta.preguntas.length"
+          [disabled]="
+            (preguntaSeleccionada.tipo !== tiposPregunta.COMPLEMENTADA &&
+              !preguntaSeleccionada.hasRespuesta) ||
+            (preguntaSeleccionada.tipo === tiposPregunta.COMPLEMENTADA &&
+              !preguntaSeleccionada.complementadaHasRespuestas)
+          "
+          (click)="sendData()"
+        >
+          <ion-icon name="send-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+
+  <div class="ion-padding">
+    @if (preguntaSeleccionada.complemento.length) {
+      <div>
+        <b>{{ preguntaSeleccionada.nombre }}</b>
+        @if (preguntaSeleccionada.descripcion) {
+          <br />
+          <span>{{ preguntaSeleccionada.descripcion }}</span>
+        }
+      </div>
+      <br />
+
+      <div class="container--scroll">
+        @for (item of preguntaSeleccionada.complemento; track $index) {
+          <app-pregunta
+            [raiz]="preguntaSeleccionada"
+            [pregunta]="item"
+            [preguntas]="encuesta.preguntas"
+            (respuestaUpdated)="updateObservable()"
+          ></app-pregunta>
+        }
+      </div>
+    } @else {
+      <div class="container--scroll">
+        <app-pregunta
+          [pregunta]="preguntaSeleccionada"
+          [preguntas]="encuesta.preguntas"
+          (respuestaUpdated)="updateObservable()"
+        ></app-pregunta>
+      </div>
+    }
+  </div>
+}

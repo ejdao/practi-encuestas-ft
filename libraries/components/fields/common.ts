@@ -30,6 +30,7 @@ export interface TsdConfigFieldI {
   showHiddenButton?: boolean;
   emitOnKeyUp?: boolean;
   color?: ThemePalette;
+  dangerXHidden?: boolean;
 }
 
 export interface TsdConfigAutoCompleteFieldI extends TsdConfigFieldI {

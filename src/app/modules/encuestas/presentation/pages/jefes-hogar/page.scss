@@ -1,0 +1,54 @@
+.app-jefes-hogar-web {
+  .card {
+    &__title {
+      font-size: 14px;
+      & > span {
+        font-size: 12px;
+        display: block;
+      }
+    }
+    &__subtitle {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &__state-bubble {
+        border-radius: 25px;
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+        float: left;
+      }
+    }
+    &__content {
+      margin-top: -15px;
+      font-size: 12px;
+      line-height: 12px !important;
+      .numeracion {
+        float: right;
+        font-size: 9px;
+        color: rgb(199, 189, 189);
+      }
+    }
+  }
+
+  .mat-checkbox-disabled .mat-checkbox-label {
+    color: var(--tak-dark-color-500);
+  }
+  .top-container {
+    max-height: 45px;
+    > div {
+      text-align: center;
+      padding: 15px 15px 0 15px;
+    }
+  }
+  .buttons-container {
+    max-height: 60px;
+    --overflow: hidden;
+  }
+  .question-title-container {
+    max-height: 80px;
+    > div {
+      padding: 15px 15px 0 15px;
+    }
+  }
+}
