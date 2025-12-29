@@ -11,17 +11,34 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ControlValueAccessor, FormControl, FormGroupDirective, NgControl } from '@angular/forms';
-import { TSD_DEFAULT_APPEARANCE_FORM, TsdConfigFieldI } from '../common';
+import { TSD_DEFAULT_APPEARANCE_FORM, TsdConfigDateFieldI } from '../common';
+import { MatFormField, MatLabel } from '@toshida/material/form-field';
+import { MatDatepickerModule } from '@toshida/material/datepicker';
+import { MatInputModule } from '@toshida/material/input';
+import { TsdErrorComponent } from '../error/component';
+import {
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from '@toshida/material/core';
 
 @Component({
-  imports: [],
+  imports: [
+    MatLabel,
+    MatFormField,
+    MatInputModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    TsdErrorComponent,
+  ],
+  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   selector: 'tsd-date-field',
-  templateUrl: './date-field.component.html',
+  templateUrl: './component.html',
 })
 export class TsdDateFieldComponent
   implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor
 {
-  @Input() config: TsdConfigFieldI = {};
+  @Input() config: TsdConfigDateFieldI = {};
   @Input() disabled = false;
   @Input() placeholder = '';
 

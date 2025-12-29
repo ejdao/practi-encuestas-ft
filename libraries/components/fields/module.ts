@@ -4,6 +4,7 @@ import { TsdTextFieldComponent } from './text-field/component';
 import { TsdAutocompleteFieldComponent } from './autocomplete-field/component';
 import { TsdRemoteAutocompleteFieldComponent } from './remote-autocomplete-field/component';
 import { TsdSelectFieldComponent } from './select-field/component';
+import { TsdDateFieldComponent } from './date-field/component';
 
 const components = [
   FormsModule,
@@ -12,6 +13,7 @@ const components = [
   TsdAutocompleteFieldComponent,
   TsdRemoteAutocompleteFieldComponent,
   TsdSelectFieldComponent,
+  TsdDateFieldComponent,
 ];
 
 @NgModule({

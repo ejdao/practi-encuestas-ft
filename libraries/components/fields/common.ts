@@ -42,3 +42,9 @@ export interface TsdConfigAutoCompleteFieldI extends TsdConfigFieldI {
   justSearchOneTime?: boolean;
   hasDefaultValue?: boolean;
 }
+
+export interface TsdConfigDateFieldI extends TsdConfigFieldI {
+  minDate?: string | Date;
+  maxDate?: string | Date;
+  notInput?: boolean;
+}

@@ -12,30 +12,34 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ObservableUpdated } from '@encuestas/application/observables';
 import { EntidadBasica, Pregunta } from '@encuestas/domain/entities';
 import { TIPOS_PREGUNTA } from '@encuestas/domain/types';
-import { Subscription } from 'rxjs';
-import { ObservableUpdated } from '@encuestas/application/observables';
 import {
+  TsdDateFieldComponent,
   TsdRemoteAutocompleteFieldComponent,
   TsdTextFieldComponent,
 } from '@toshida/ng-components/fields';
 import { MatCheckboxModule } from '@toshida/material/checkbox';
 import { MatRadioModule } from '@toshida/material/radio';
 import { CtmTypeI } from '@common/models';
+import { provideNativeDateAdapter } from '@toshida/material/core';
 
 @Component({
   standalone: true,
   imports: [
-    TsdTextFieldComponent,
     FormsModule,
+    TsdTextFieldComponent,
+    TsdDateFieldComponent,
     TsdRemoteAutocompleteFieldComponent,
     ReactiveFormsModule,
-    MatRadioModule,
     MatCheckboxModule,
+    MatRadioModule,
   ],
+  providers: [provideNativeDateAdapter()],
   selector: 'app-pregunta',
   templateUrl: './pregunta.html',
   encapsulation: ViewEncapsulation.None,
@@ -59,7 +63,7 @@ export class PreguntaComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly barriosUrl = `${environment.apiUrlGen}/v1/srd/ubicacion/barrios`;
   readonly tiposDocumentoUrl = `${environment.apiUrlGen}/v1/encuestas/recursos/tipos-documento`;
   readonly parentezcoUrl = `${environment.apiUrlGen}/v1/encuestas/recursos/parentezcos`;
-  readonly epsUrl = `${environment.apiUrlGen}/v1/gen/eps`;
+  readonly epsUrl = `${environment.apiUrlGen}/v1/srd/general/recursos/eps`;
 
   private _ctmTypeUrl = '';
   private _ctmTypeHasComplement = false;

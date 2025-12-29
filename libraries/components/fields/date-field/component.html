@@ -1,4 +1,4 @@
-@if (!notInput) {
+@if (!config.notInput) {
   <div class="tsd-form-container">
     <mat-form-field
       [floatLabel]="config.floatLabel || 'auto'"
@@ -20,8 +20,8 @@
         (dateChange)="onChange($event)"
         [placeholder]="placeholder"
         [disabled]="isDisabled"
-        [min]="minDate"
-        [max]="maxDate"
+        [min]="config.minDate"
+        [max]="config.maxDate"
         (focusout)="onFocusOut()"
         [matDatepicker]="picker"
       />
@@ -32,29 +32,31 @@
       <tsd-error [control]="control" [isDateField]="true"> </tsd-error>
     }
   </div>
-}
-@if (notInput) {
+} @else {
   <div>
     <div
-      class="tak__date-not-input__picker-container"
+      class="tsd__date-not-input__picker-container"
       [class.mat-form-field-invalid]="isInvalid || (isSubmitted && control.invalid)"
     >
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker (closed)="onCloseDatePicker()" #picker></mat-datepicker>
     </div>
-    <div class="tak__date-not-input__field-container">
-      <mat-form-field [color]="color">
+    <div class="tsd__date-not-input__field-container">
+      <mat-form-field
+        [appearance]="config.appearance || defaultAppearance"
+        [color]="config.color || 'primary'"
+      >
         <input
           matInput
-          [min]="minDate"
-          [max]="maxDate"
+          [min]="config.minDate"
+          [max]="config.maxDate"
           autocomplete="off"
           [matDatepicker]="picker"
           [value]="value"
           (keyup)="onChange($event)"
           (dateChange)="onChange($event)"
           [disabled]="isDisabled"
-          (focusout)="onFocusout()"
+          (focusout)="onFocusOut()"
         />
       </mat-form-field>
     </div>

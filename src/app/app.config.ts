@@ -7,6 +7,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { CustomPreloadingStrategy } from './app.preloading.strategy';
+import { provideNativeDateAdapter } from '@toshida/material/core';
 import { provideIonicAngular } from '@ionic/angular/standalone';
 import { ROOT_REDUCERS } from '@stores/state';
 import { provideStore } from '@ngrx/store';
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideIonicAngular({ mode: 'ios' }),
     provideZonelessChangeDetection(),
+    provideNativeDateAdapter(),
     provideRouter(
       routes,
       withPreloading(CustomPreloadingStrategy),
